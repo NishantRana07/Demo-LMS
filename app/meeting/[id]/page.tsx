@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/use-auth'
 import { useParams, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { getMeetingById, recordAttendance, getAttendanceByMeetingAndUser, updateAttendance, createNotification } from '@/lib/storage'
+import { getMeetingById, joinMeeting, leaveMeeting, getAttendanceByMeetingAndUser, getAllUsers, createNotification } from '@/lib/storage'
 import { Phone, Mic, Video, Settings, Users, MessageSquare, ArrowLeft, Clock, MapPin } from 'lucide-react'
 import Link from 'next/link'
 
@@ -66,16 +66,9 @@ export default function MeetingRoomPage() {
     if (!meeting) return
 
     const now = new Date()
-    const attendance = recordAttendance({
-      meetingId: meetingId as string,
-      userId: user!.id,
-      joinedAt: now.toISOString(),
-      duration: 0,
-      status: 'present',
-    })
-
-    setAttendanceId(attendance.id)
+    const attendance = joinMeeting(meetingId as string, user!.id)
     setJoined(true)
+    setAttendanceId(attendance.id)
     setJoinedTime(now)
 
     // Send notification
@@ -92,11 +85,7 @@ export default function MeetingRoomPage() {
     if (!attendanceId) return
 
     // Update attendance with leave time
-    updateAttendance(attendanceId, {
-      leftAt: new Date().toISOString(),
-      duration,
-      status: duration > 5 * 60 ? 'present' : 'absent',
-    })
+    leaveMeeting(meetingId as string, user!.id)
 
     setJoined(false)
     router.push('/employee/meetings')

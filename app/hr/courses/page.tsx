@@ -25,9 +25,12 @@ import {
   getAllUsers,
   initializeStorage,
   updateCourse,
-  deleteCourse
+  deleteCourse,
+  createCourse
 } from '@/lib/storage'
 import type { Course, User } from '@/lib/storage'
+import { RichTextEditor } from '@/components/rich-text-editor'
+import { CreateCourseModal } from '@/components/create-course-modal'
 
 export default function HRCourses() {
   const router = useRouter()
@@ -37,6 +40,7 @@ export default function HRCourses() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState<string>('all')
+  const [showCreateModal, setShowCreateModal] = useState(false)
 
   useEffect(() => {
     initializeStorage()
@@ -67,6 +71,12 @@ export default function HRCourses() {
       deleteCourse(courseId)
       loadData()
     }
+  }
+
+  const handleCreateCourse = (courseData: Omit<Course, 'id' | 'createdAt'>) => {
+    const newCourse = createCourse(courseData)
+    loadData()
+    setShowCreateModal(false)
   }
 
   const getStatusColor = (status: string) => {
@@ -125,7 +135,10 @@ export default function HRCourses() {
               </p>
             </div>
             
-            <Button className="gap-2">
+            <Button 
+              className="gap-2"
+              onClick={() => setShowCreateModal(true)}
+            >
               <Plus className="h-4 w-4" />
               Create Course
             </Button>
@@ -268,7 +281,10 @@ export default function HRCourses() {
                       ? 'Try adjusting your filters' 
                       : 'Get started by creating your first course'}
                   </p>
-                  <Button className="gap-2">
+                  <Button 
+                    className="gap-2"
+                    onClick={() => setShowCreateModal(true)}
+                  >
                     <Plus className="h-4 w-4" />
                     Create Course
                   </Button>
@@ -278,6 +294,13 @@ export default function HRCourses() {
           </div>
         </div>
       </main>
+
+      {showCreateModal && (
+        <CreateCourseModal
+          onClose={() => setShowCreateModal(false)}
+          onSubmit={handleCreateCourse}
+        />
+      )}
     </div>
   )
 }

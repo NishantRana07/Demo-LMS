@@ -17,21 +17,34 @@ import {
   Users,
   MapPin,
   Video,
-  FileText
+  FileText,
+  Monitor,
+  Phone,
+  Link,
+  Play
 } from 'lucide-react'
 import { 
   getCurrentUser, 
-  initializeStorage
+  getMeetings,
+  createMeeting,
+  initializeStorage,
+  updateMeeting,
+  deleteMeeting
 } from '@/lib/storage'
-import type { User, ClassroomSession } from '@/lib/storage'
+import type { User, Meeting } from '@/lib/storage'
+import { CreateMeetingModal } from '@/components/create-meeting-modal'
+import { MeetingAttendance } from '@/components/meeting-attendance'
+import { teamsService } from '@/lib/microsoft-teams'
 
 export default function HRClassroomSessions() {
   const router = useRouter()
   const [currentUser, setCurrentUser] = useState<User | null>(null)
-  const [sessions, setSessions] = useState<ClassroomSession[]>([])
+  const [sessions, setSessions] = useState<Meeting[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState<string>('all')
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null)
 
   useEffect(() => {
     initializeStorage()
@@ -42,71 +55,134 @@ export default function HRClassroomSessions() {
     }
     setCurrentUser(user)
     
-    // Load demo classroom sessions
-    const demoSessions: ClassroomSession[] = [
-      {
-        id: 'session-1',
-        title: 'Leadership Workshop',
-        instructor: 'John Smith',
-        location: 'Conference Room A',
-        scheduledAt: new Date(Date.now() + 86400000).toISOString(),
-        duration: 120,
-        maxParticipants: 20,
-        currentParticipants: ['user-employee-1', 'user-employee-2'],
-        materials: ['presentation.pdf', 'handout.docx'],
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: 'session-2',
-        title: 'Team Building Activities',
-        instructor: 'Sarah Johnson',
-        location: 'Training Room B',
-        scheduledAt: new Date(Date.now() + 172800000).toISOString(),
-        duration: 90,
-        maxParticipants: 15,
-        currentParticipants: ['user-employee-3'],
-        materials: ['activity-guide.pdf'],
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: 'session-3',
-        title: 'Communication Skills Training',
-        instructor: 'Michael Brown',
-        location: 'Virtual - Zoom',
-        scheduledAt: new Date(Date.now() + 259200000).toISOString(),
-        duration: 180,
-        maxParticipants: 30,
-        currentParticipants: ['user-employee-1', 'user-employee-4', 'user-employee-5'],
-        materials: ['workbook.pdf', 'exercises.docx'],
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: 'session-4',
-        title: 'Project Management Fundamentals',
-        instructor: 'Emily Davis',
-        location: 'Conference Room C',
-        scheduledAt: new Date(Date.now() - 86400000).toISOString(),
-        duration: 240,
-        maxParticipants: 25,
-        currentParticipants: ['user-employee-2', 'user-employee-3', 'user-employee-4'],
-        materials: ['pm-guide.pdf', 'templates.xlsx'],
-        createdAt: new Date().toISOString()
-      }
-    ]
-    
-    setSessions(demoSessions)
+    // Load classroom sessions (non-webinar meetings)
+    const allMeetings = getMeetings()
+    const classroomSessions = allMeetings.filter(meeting => !meeting.webinarMode)
+    setSessions(classroomSessions)
     setLoading(false)
   }, [router])
 
+  const handleCreateSession = async (sessionData: {
+    title: string
+    description: string
+    scheduledAt: string
+    participants: string[]
+    platform: 'teams' | 'meet' | 'zoom' | 'custom'
+    customUrl?: string
+  }) => {
+    try {
+      const newSession = createMeeting({
+        title: sessionData.title,
+        description: sessionData.description,
+        scheduledAt: sessionData.scheduledAt,
+        participants: sessionData.participants,
+        createdBy: currentUser?.id || 'hr-admin',
+        platform: sessionData.platform,
+        duration: 60,
+        status: 'scheduled',
+        webinarMode: false, // Classroom sessions are not webinars
+        createdAt: new Date().toISOString()
+      })
+
+      // Create platform-specific meeting
+      let platformMeeting
+      const endTime = new Date(sessionData.scheduledAt)
+      endTime.setHours(endTime.getHours() + 1)
+
+      switch (sessionData.platform) {
+        case 'teams':
+          platformMeeting = await teamsService.createTeamsMeeting({
+            subject: sessionData.title,
+            startTime: sessionData.scheduledAt,
+            endTime: endTime.toISOString(),
+            participants: sessionData.participants,
+            description: sessionData.description
+          })
+          break
+        case 'meet':
+          platformMeeting = await teamsService.createGoogleMeetMeeting({
+            subject: sessionData.title,
+            startTime: sessionData.scheduledAt,
+            endTime: endTime.toISOString(),
+            participants: sessionData.participants,
+            description: sessionData.description
+          })
+          break
+        case 'zoom':
+          platformMeeting = await teamsService.createZoomMeeting({
+            subject: sessionData.title,
+            startTime: sessionData.scheduledAt,
+            endTime: endTime.toISOString(),
+            participants: sessionData.participants,
+            description: sessionData.description
+          })
+          break
+        case 'custom':
+          if (sessionData.customUrl) {
+            platformMeeting = await teamsService.createCustomMeeting({
+              subject: sessionData.title,
+              startTime: sessionData.scheduledAt,
+              endTime: endTime.toISOString(),
+              participants: sessionData.participants,
+              joinUrl: sessionData.customUrl,
+              description: sessionData.description
+            })
+          }
+          break
+      }
+
+      if (platformMeeting?.success && platformMeeting.meeting) {
+        updateMeeting(newSession.id, {
+          meetingLink: platformMeeting.meeting.joinUrl
+        })
+        
+        await teamsService.sendMeetingInvitation(platformMeeting.meeting)
+      }
+
+      // Reload sessions
+      const allMeetings = getMeetings()
+      const classroomSessions = allMeetings.filter(meeting => !meeting.webinarMode)
+      setSessions(classroomSessions)
+      setShowCreateModal(false)
+    } catch (error) {
+      console.error('Error creating classroom session:', error)
+      alert('Failed to create classroom session. Please try again.')
+    }
+  }
+
+  const handleDeleteSession = (sessionId: string) => {
+    if (confirm('Are you sure you want to delete this classroom session?')) {
+      deleteMeeting(sessionId)
+      const allMeetings = getMeetings()
+      const classroomSessions = allMeetings.filter(meeting => !meeting.webinarMode)
+      setSessions(classroomSessions)
+    }
+  }
+
   const filteredSessions = sessions.filter(session => {
     const matchesSearch = session.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         session.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         session.location.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = filterStatus === 'all' || 
-      (filterStatus === 'upcoming' && new Date(session.scheduledAt) > new Date()) ||
-      (filterStatus === 'past' && new Date(session.scheduledAt) <= new Date())
+                         session.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = filterStatus === 'all' || session.status === filterStatus
     return matchesSearch && matchesStatus
   })
+
+  const getPlatformIcon = (platform: string) => {
+    switch (platform) {
+      case 'teams': return <Monitor className="h-4 w-4 text-blue-600" />
+      case 'meet': return <Video className="h-4 w-4 text-green-600" />
+      case 'zoom': return <Phone className="h-4 w-4 text-blue-500" />
+      default: return <Link className="h-4 w-4 text-gray-600" />
+    }
+  }
+
+  const getPlatformName = (platform: string) => {
+    switch (platform) {
+      case 'teams': return 'Microsoft Teams'
+      case 'meet': return 'Google Meet'
+      case 'zoom': return 'Zoom'
+      default: return 'Custom Link'
+    }
+  }
 
   const getSessionStatus = (scheduledAt: string) => {
     const now = new Date()
@@ -123,12 +199,6 @@ export default function HRClassroomSessions() {
       case 'completed': return 'bg-gray-100 text-gray-800'
       default: return 'bg-gray-100 text-gray-800'
     }
-  }
-
-  const isVirtual = (location: string) => {
-    return location.toLowerCase().includes('zoom') || 
-           location.toLowerCase().includes('virtual') || 
-           location.toLowerCase().includes('online')
   }
 
   if (loading) {
@@ -169,7 +239,10 @@ export default function HRClassroomSessions() {
               </p>
             </div>
             
-            <Button className="gap-2">
+            <Button 
+              onClick={() => setShowCreateModal(true)}
+              className="gap-2"
+            >
               <Plus className="h-4 w-4" />
               Schedule Session
             </Button>
@@ -216,7 +289,7 @@ export default function HRClassroomSessions() {
                 <div>
                   <p className="text-sm text-muted-foreground">Total Participants</p>
                   <p className="text-2xl font-bold text-foreground mt-1">
-                    {sessions.reduce((sum, s) => sum + s.currentParticipants.length, 0)}
+                    {sessions.reduce((sum, s) => sum + s.participants.length, 0)}
                   </p>
                 </div>
                 <Users className="h-8 w-8 text-purple-500" />
@@ -251,8 +324,6 @@ export default function HRClassroomSessions() {
             {filteredSessions.length > 0 ? (
               filteredSessions.map((session) => {
                 const status = getSessionStatus(session.scheduledAt)
-                const isVirtualSession = isVirtual(session.location)
-                const enrollmentRate = Math.round((session.currentParticipants.length / session.maxParticipants) * 100)
                 
                 return (
                   <Card key={session.id} className="bg-card border border-border hover:shadow-lg transition-shadow">
@@ -264,64 +335,70 @@ export default function HRClassroomSessions() {
                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(status)}`}>
                               {status}
                             </span>
-                            {isVirtualSession && (
-                              <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                Virtual
-                              </span>
-                            )}
+                            <div className="flex items-center gap-1">
+                              {getPlatformIcon(session.platform)}
+                              <span className="text-xs text-muted-foreground">{getPlatformName(session.platform)}</span>
+                            </div>
                           </div>
+                          
+                          <p className="text-muted-foreground mb-4">{session.description}</p>
                           
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                             <div className="flex items-center gap-2 text-sm">
-                              <Users className="h-4 w-4 text-muted-foreground" />
-                              <span className="text-muted-foreground">Instructor:</span>
-                              <span className="font-medium">{session.instructor}</span>
-                            </div>
-                            
-                            <div className="flex items-center gap-2 text-sm">
-                              {isVirtualSession ? (
-                                <Video className="h-4 w-4 text-muted-foreground" />
-                              ) : (
-                                <MapPin className="h-4 w-4 text-muted-foreground" />
-                              )}
-                              <span className="text-muted-foreground">Location:</span>
-                              <span className="font-medium">{session.location}</span>
+                              <Calendar className="h-4 w-4 text-muted-foreground" />
+                              <span className="text-muted-foreground">Date:</span>
+                              <span className="font-medium">{new Date(session.scheduledAt).toLocaleDateString()}</span>
                             </div>
                             
                             <div className="flex items-center gap-2 text-sm">
                               <Clock className="h-4 w-4 text-muted-foreground" />
-                              <span className="text-muted-foreground">Duration:</span>
-                              <span className="font-medium">{session.duration || 0} min</span>
+                              <span className="text-muted-foreground">Time:</span>
+                              <span className="font-medium">{new Date(session.scheduledAt).toLocaleTimeString()}</span>
+                            </div>
+                            
+                            <div className="flex items-center gap-2 text-sm">
+                              <Users className="h-4 w-4 text-muted-foreground" />
+                              <span className="text-muted-foreground">Participants:</span>
+                              <span className="font-medium">{session.participants.length}</span>
                             </div>
                           </div>
                           
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4">
                               <div className="text-sm">
-                                <span className="text-muted-foreground">Participants: </span>
-                                <span className="font-medium">{session.currentParticipants.length}/{session.maxParticipants}</span>
-                                <span className="text-muted-foreground ml-2">({enrollmentRate}% full)</span>
-                              </div>
-                              
-                              <div className="text-sm">
-                                <span className="text-muted-foreground">Date: </span>
-                                <span className="font-medium">
-                                  {new Date(session.scheduledAt).toLocaleDateString()} at {new Date(session.scheduledAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                                </span>
+                                <span className="text-muted-foreground">Duration: </span>
+                                <span className="font-medium">{session.duration || 0} min</span>
                               </div>
                             </div>
                             
                             <div className="flex items-center gap-2">
-                              {session.materials.length > 0 && (
-                                <Button variant="outline" size="sm" className="gap-2">
-                                  <FileText className="h-4 w-4" />
-                                  Materials ({session.materials.length})
-                                </Button>
-                              )}
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => window.open(session.meetingLink, '_blank')}
+                                className="gap-2"
+                              >
+                                <Play className="h-4 w-4" />
+                                Join
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => setSelectedSessionId(session.id)}
+                                className="gap-2"
+                              >
+                                <Users className="h-4 w-4" />
+                                Attendance
+                              </Button>
                               <Button variant="outline" size="sm">
                                 <Edit className="h-4 w-4" />
                               </Button>
-                              <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleDeleteSession(session.id)}
+                                className="text-red-600 hover:text-red-700"
+                              >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </div>
@@ -333,21 +410,52 @@ export default function HRClassroomSessions() {
                 )
               })
             ) : (
-              <Card className="p-12 text-center">
-                <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-foreground mb-2">No sessions found</h3>
+              <div className="text-center py-12">
+                <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-foreground mb-2">No Classroom Sessions Found</h3>
                 <p className="text-muted-foreground mb-4">
                   {searchTerm || filterStatus !== 'all' 
-                    ? 'Try adjusting your filters' 
-                    : 'Get started by scheduling your first session'}
+                    ? 'Try adjusting your search or filters' 
+                    : 'Get started by scheduling your first classroom session'}
                 </p>
-                <Button className="gap-2">
-                  <Plus className="h-4 w-4" />
-                  Schedule Session
-                </Button>
-              </Card>
+                {!searchTerm && filterStatus === 'all' && (
+                  <Button onClick={() => setShowCreateModal(true)} className="gap-2">
+                    <Plus className="h-4 w-4" />
+                    Schedule Session
+                  </Button>
+                )}
+              </div>
             )}
           </div>
+
+          {/* Create Session Modal */}
+          {showCreateModal && (
+            <CreateMeetingModal
+              onClose={() => setShowCreateModal(false)}
+              onSubmit={handleCreateSession}
+            />
+          )}
+
+          {/* Attendance Modal */}
+          {selectedSessionId && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div className="bg-white rounded-lg w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold text-gray-900">Session Attendance</h2>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setSelectedSessionId(null)}
+                    >
+                      Close
+                    </Button>
+                  </div>
+                  <MeetingAttendance meetingId={selectedSessionId} />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>

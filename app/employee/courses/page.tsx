@@ -5,14 +5,62 @@ import { useAuth } from '@/hooks/use-auth'
 import { EmployeeSidebar } from '@/components/employee-sidebar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { getCourses, getCourseStat } from '@/lib/storage'
-import { BookOpen, Clock, Zap, ArrowRight } from 'lucide-react'
+import { getCourses, getCourseStat, updateCourseStat } from '@/lib/storage'
+import { BookOpen, Clock, Zap, ArrowRight, Play, CheckCircle, Lock, Award } from 'lucide-react'
 import Link from 'next/link'
+import type { Course, User } from '@/lib/storage'
 
 export default function CoursesPage() {
   const { user, loading } = useAuth()
   const [courses, setCourses] = useState<any[]>([])
   const [courseStats, setCourseStats] = useState<Map<string, any>>(new Map())
+
+  const handleStartCourse = (courseId: string) => {
+    if (!user) return
+    
+    updateCourseStat(user.id, courseId, {
+      started: true,
+      lessonsCompleted: 0,
+      totalLessons: courses.find(c => c.id === courseId)?.lessons.length || 0,
+      pointsEarned: 0,
+    })
+    
+    // Refresh stats
+    const stats = new Map(courseStats)
+    const courseStat = stats.get(courseId)
+    if (courseStat) {
+      courseStat.started = true
+      stats.set(courseId, courseStat)
+      setCourseStats(stats)
+    }
+  }
+
+  const handleCompleteLesson = (courseId: string, lessonId: string) => {
+    if (!user) return
+    
+    const stat = getCourseStat(user.id, courseId) || {
+      started: false,
+      lessonsCompleted: 0,
+      totalLessons: 0,
+      pointsEarned: 0,
+    }
+    
+    updateCourseStat(user.id, courseId, {
+      ...stat,
+      lessonsCompleted: stat.lessonsCompleted + 1,
+      pointsEarned: stat.pointsEarned + 10,
+    })
+    
+    // Refresh stats
+    const stats = new Map(courseStats)
+    const courseStat = stats.get(courseId)
+    if (courseStat) {
+      courseStat.lessonsCompleted += 1
+      courseStat.pointsEarned += 10
+      stats.set(courseId, courseStat)
+      setCourseStats(stats)
+    }
+  }
 
   useEffect(() => {
     if (user?.role === 'employee') {

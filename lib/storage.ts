@@ -56,6 +56,13 @@ export interface Meeting {
   participants: string[]
   createdBy: string
   meetingLink: string
+  platform: 'teams' | 'meet' | 'zoom' | 'custom'
+  duration: number // in minutes
+  status: 'scheduled' | 'in-progress' | 'completed' | 'cancelled'
+  webinarMode: boolean
+  maxParticipants?: number
+  recordingUrl?: string
+  createdAt: string
 }
 
 export interface Attendance {
@@ -64,8 +71,11 @@ export interface Attendance {
   userId: string
   joinedAt: string
   leftAt?: string
-  duration: number
-  status: 'present' | 'absent'
+  duration: number // in minutes
+  status: 'present' | 'absent' | 'late'
+  engagementScore: number // 0-100
+  notes?: string
+  createdAt: string
 }
 
 export interface Notification {
@@ -565,6 +575,12 @@ export function initializeStorage() {
         participants: ['user-emp-1', 'user-admin-1'],
         createdBy: 'user-admin-1',
         meetingLink: 'https://qedge.local/meeting/meeting-demo-1',
+        platform: 'teams',
+        duration: 60,
+        status: 'scheduled',
+        webinarMode: false,
+        maxParticipants: 50,
+        createdAt: new Date().toISOString()
       },
       {
         id: 'meeting-demo-2',
@@ -574,6 +590,12 @@ export function initializeStorage() {
         participants: ['user-emp-1', 'user-admin-1'],
         createdBy: 'user-admin-1',
         meetingLink: 'https://qedge.local/meeting/meeting-demo-2',
+        platform: 'meet',
+        duration: 90,
+        status: 'scheduled',
+        webinarMode: true,
+        maxParticipants: 100,
+        createdAt: new Date().toISOString()
       },
     ]
     localStorage.setItem('qedge_meetings', JSON.stringify(demoCourses))
@@ -902,16 +924,36 @@ export function getMeetingById(id: string): Meeting | null {
   return meetings.find((m) => m.id === id) || null
 }
 
-// Attendance functions
+export function updateMeeting(id: string, updates: Partial<Meeting>): Meeting | null {
+  const meetings = getMeetings()
+  const index = meetings.findIndex((m) => m.id === id)
+  if (index === -1) return null
+  
+  meetings[index] = { ...meetings[index], ...updates }
+  localStorage.setItem('qedge_meetings', JSON.stringify(meetings))
+  return meetings[index]
+}
+
+export function deleteMeeting(id: string): boolean {
+  const meetings = getMeetings()
+  const index = meetings.findIndex((m) => m.id === id)
+  if (index === -1) return false
+  
+  meetings.splice(index, 1)
+  localStorage.setItem('qedge_meetings', JSON.stringify(meetings))
+  return true
+}
+
 export function getAttendance(): Attendance[] {
   return JSON.parse(localStorage.getItem('qedge_attendance') || '[]')
 }
 
-export function recordAttendance(attendance: Omit<Attendance, 'id'>): Attendance {
+export function createAttendance(attendance: Omit<Attendance, 'id' | 'createdAt'>): Attendance {
   const records = getAttendance()
   const newRecord: Attendance = {
     ...attendance,
     id: `attendance-${Date.now()}`,
+    createdAt: new Date().toISOString()
   }
   records.push(newRecord)
   localStorage.setItem('qedge_attendance', JSON.stringify(records))
@@ -923,6 +965,16 @@ export function getAttendanceByMeetingAndUser(meetingId: string, userId: string)
   return records.find((a) => a.meetingId === meetingId && a.userId === userId) || null
 }
 
+export function getAttendanceByMeeting(meetingId: string): Attendance[] {
+  const records = getAttendance()
+  return records.filter((a) => a.meetingId === meetingId)
+}
+
+export function getAttendanceByUser(userId: string): Attendance[] {
+  const records = getAttendance()
+  return records.filter((a) => a.userId === userId)
+}
+
 export function updateAttendance(id: string, updates: Partial<Attendance>): Attendance | null {
   const records = getAttendance()
   const index = records.findIndex((a) => a.id === id)
@@ -931,6 +983,71 @@ export function updateAttendance(id: string, updates: Partial<Attendance>): Atte
   records[index] = { ...records[index], ...updates }
   localStorage.setItem('qedge_attendance', JSON.stringify(records))
   return records[index]
+}
+
+export function joinMeeting(meetingId: string, userId: string): Attendance {
+  const existing = getAttendanceByMeetingAndUser(meetingId, userId)
+  
+  if (existing) {
+    // User is re-joining, update joinedAt
+    return updateAttendance(existing.id, {
+      joinedAt: new Date().toISOString(),
+      status: 'present'
+    })!
+  } else {
+    // First time joining
+    return createAttendance({
+      meetingId,
+      userId,
+      joinedAt: new Date().toISOString(),
+      duration: 0,
+      status: 'present',
+      engagementScore: 0
+    })
+  }
+}
+
+export function leaveMeeting(meetingId: string, userId: string): Attendance | null {
+  const attendance = getAttendanceByMeetingAndUser(meetingId, userId)
+  if (!attendance) return null
+  
+  const joinedAt = new Date(attendance.joinedAt)
+  const leftAt = new Date()
+  const duration = Math.round((leftAt.getTime() - joinedAt.getTime()) / (1000 * 60)) // in minutes
+  
+  return updateAttendance(attendance.id, {
+    leftAt: leftAt.toISOString(),
+    duration,
+    status: duration > 0 ? 'present' : 'absent'
+  })
+}
+
+export function getMeetingStats(meetingId: string): {
+  totalParticipants: number
+  presentCount: number
+  absentCount: number
+  averageDuration: number
+  averageEngagement: number
+} {
+  const attendance = getAttendanceByMeeting(meetingId)
+  const present = attendance.filter(a => a.status === 'present')
+  const absent = attendance.filter(a => a.status === 'absent')
+  
+  const averageDuration = present.length > 0 
+    ? present.reduce((sum, a) => sum + a.duration, 0) / present.length 
+    : 0
+    
+  const averageEngagement = present.length > 0 
+    ? present.reduce((sum, a) => sum + a.engagementScore, 0) / present.length 
+    : 0
+  
+  return {
+    totalParticipants: attendance.length,
+    presentCount: present.length,
+    absentCount: absent.length,
+    averageDuration,
+    averageEngagement
+  }
 }
 
 // Notification functions

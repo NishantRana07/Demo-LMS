@@ -317,7 +317,7 @@ export default function HRWebinars() {
             >
               <option value="all">All Status</option>
               <option value="scheduled">Scheduled</option>
-              <option value="live">Live</option>
+              <option value="in-progress">In Progress</option>
               <option value="completed">Completed</option>
               <option value="cancelled">Cancelled</option>
             </select>
@@ -330,7 +330,7 @@ export default function HRWebinars() {
               <option value="zoom">Zoom</option>
               <option value="teams">Microsoft Teams</option>
               <option value="meet">Google Meet</option>
-              <option value="webex">Webex</option>
+              <option value="custom">Custom</option>
             </select>
           </div>
 

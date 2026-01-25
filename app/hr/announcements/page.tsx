@@ -19,14 +19,18 @@ import {
   AlertTriangle,
   Info,
   CheckCircle,
-  Send
+  Send,
+  X
 } from 'lucide-react'
 import { 
   getCurrentUser, 
   getAnnouncements,
+  createAnnouncement,
   initializeStorage
 } from '@/lib/storage'
+import { sendAnnouncementEmail, generateAnnouncementEmailHTML, getRecipientEmails } from '@/lib/email'
 import type { User, Announcement } from '@/lib/storage'
+import { CreateAnnouncementModal } from '@/components/create-announcement-modal'
 
 export default function HRAnnouncements() {
   const router = useRouter()
@@ -36,6 +40,9 @@ export default function HRAnnouncements() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterPriority, setFilterPriority] = useState<string>('all')
   const [filterAudience, setFilterAudience] = useState<string>('all')
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [sendingEmail, setSendingEmail] = useState(false)
+  const [emailStatus, setEmailStatus] = useState<{ success: boolean; message: string } | null>(null)
 
   useEffect(() => {
     initializeStorage()
@@ -48,6 +55,59 @@ export default function HRAnnouncements() {
     setAnnouncements(getAnnouncements())
     setLoading(false)
   }, [router])
+
+  const handleCreateAnnouncement = async (announcementData: {
+    title: string
+    content: string
+    priority: 'low' | 'normal' | 'high' | 'urgent'
+    audience: 'all' | 'hr' | 'employee' | 'candidate'
+    sendEmail: boolean
+  }) => {
+    try {
+      // Create announcement in storage
+      const newAnnouncement = createAnnouncement({
+        title: announcementData.title,
+        content: announcementData.content,
+        priority: announcementData.priority,
+        audience: announcementData.audience
+      })
+      
+      setAnnouncements(getAnnouncements())
+      
+      // Send email if requested
+      if (announcementData.sendEmail) {
+        setSendingEmail(true)
+        const recipientEmails = getRecipientEmails(announcementData.audience)
+        
+        if (recipientEmails.length > 0) {
+          const emailHTML = generateAnnouncementEmailHTML(
+            announcementData.title,
+            announcementData.content,
+            announcementData.priority,
+            currentUser?.name || 'HR Admin'
+          )
+          
+          const emailResult = await sendAnnouncementEmail({
+            to: recipientEmails,
+            subject: `Announcement: ${announcementData.title}`,
+            htmlContent: emailHTML,
+            senderId: currentUser?.id || 'hr-admin'
+          })
+          
+          setEmailStatus(emailResult)
+        } else {
+          setEmailStatus({ success: false, message: 'No recipients found for the selected audience' })
+        }
+        
+        setSendingEmail(false)
+      }
+      
+      setShowCreateModal(false)
+    } catch (error) {
+      console.error('Error creating announcement:', error)
+      setEmailStatus({ success: false, message: 'Failed to create announcement' })
+    }
+  }
 
   const filteredAnnouncements = announcements.filter(announcement => {
     const matchesSearch = announcement.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -138,7 +198,10 @@ export default function HRAnnouncements() {
               </p>
             </div>
             
-            <Button className="gap-2">
+            <Button 
+              className="gap-2"
+              onClick={() => setShowCreateModal(true)}
+            >
               <Plus className="h-4 w-4" />
               Create Announcement
             </Button>
@@ -305,8 +368,37 @@ export default function HRAnnouncements() {
               </Card>
             )}
           </div>
+
+          {/* Email Status Notification */}
+          {emailStatus && (
+            <div className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+              emailStatus.success ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`}>
+              <div className="flex items-center gap-2">
+                {emailStatus.success ? <CheckCircle className="h-5 w-5" /> : <AlertTriangle className="h-5 w-5" />}
+                <span>{emailStatus.message}</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setEmailStatus(null)}
+                  className="text-white hover:bg-white/20"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </main>
+
+      {/* Create Announcement Modal */}
+      {showCreateModal && (
+        <CreateAnnouncementModal
+          onClose={() => setShowCreateModal(false)}
+          onSubmit={handleCreateAnnouncement}
+          sendingEmail={sendingEmail}
+        />
+      )}
     </div>
   )
 }

@@ -25,9 +25,12 @@ import {
   getAllUsers, 
   initializeStorage,
   updateUser,
-  deleteUser
+  deleteUser,
+  createUser
 } from '@/lib/storage'
 import type { User } from '@/lib/storage'
+import { CreateUserModal } from '@/components/create-user-modal'
+import { EditUserModal } from '@/components/edit-user-modal'
 
 export default function HRUsers() {
   const router = useRouter()
@@ -36,6 +39,8 @@ export default function HRUsers() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterRole, setFilterRole] = useState<string>('all')
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [editingUser, setEditingUser] = useState<User | null>(null)
 
   useEffect(() => {
     initializeStorage()
@@ -49,19 +54,41 @@ export default function HRUsers() {
     setLoading(false)
   }, [router])
 
+  const handleCreateUser = (userData: Omit<User, 'id' | 'createdAt'>) => {
+    const newUser = createUser(userData)
+    setUsers(getAllUsers())
+    setShowCreateModal(false)
+  }
+
+  const handleEditUser = (userData: Partial<User>) => {
+    if (editingUser) {
+      updateUser(editingUser.id, userData)
+      setUsers(getAllUsers())
+      setEditingUser(null)
+    }
+  }
+
+  const toggleUserStatus = (userId: string) => {
+    const user = users.find(u => u.id === userId)
+    if (user) {
+      updateUser(userId, { isActive: !user.isActive })
+      setUsers(getAllUsers())
+    }
+  }
+
+  const handleDeleteUser = (userId: string) => {
+    if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+      deleteUser(userId)
+      setUsers(getAllUsers())
+    }
+  }
+
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.email.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesRole = filterRole === 'all' || user.role === filterRole
     return matchesSearch && matchesRole
   })
-
-  const handleDeleteUser = (userId: string) => {
-    if (confirm('Are you sure you want to delete this user?')) {
-      deleteUser(userId)
-      setUsers(getAllUsers())
-    }
-  }
 
   const getRoleColor = (role: string) => {
     switch(role) {
@@ -105,7 +132,10 @@ export default function HRUsers() {
               </p>
             </div>
             
-            <Button className="gap-2">
+            <Button 
+              className="gap-2"
+              onClick={() => setShowCreateModal(true)}
+            >
               <Plus className="h-4 w-4" />
               Add User
             </Button>
@@ -212,7 +242,11 @@ export default function HRUsers() {
                       </div>
                       
                       <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => setEditingUser(user)}
+                        >
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button 
@@ -234,6 +268,21 @@ export default function HRUsers() {
           </Card>
         </div>
       </main>
+
+      {showCreateModal && (
+        <CreateUserModal
+          onClose={() => setShowCreateModal(false)}
+          onSubmit={handleCreateUser}
+        />
+      )}
+
+      {editingUser && (
+        <EditUserModal
+          onClose={() => setEditingUser(null)}
+          onSubmit={handleEditUser}
+          user={editingUser}
+        />
+      )}
     </div>
   )
 }
