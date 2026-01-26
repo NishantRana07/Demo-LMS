@@ -1304,6 +1304,136 @@ export default function HRDashboard() {
             </div>
           </Card>
 
+          {/* Quick Stats */}
+          <Card className="bg-card border border-border">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Quick Stats</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center p-4 bg-blue-50 rounded-lg">
+                  <div className="text-2xl font-bold text-blue-600">{stats.users.active}</div>
+                  <p className="text-sm text-muted-foreground">Active Users</p>
+                </div>
+                <div className="text-center p-4 bg-orange-50 rounded-lg">
+                  <div className="text-2xl font-bold text-orange-600">{stats.evaluations.pending}</div>
+                  <p className="text-sm text-muted-foreground">Pending Tasks</p>
+                </div>
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600">{stats.messages.unread}</div>
+                  <p className="text-sm text-muted-foreground">Unread Messages</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Quick Actions */}
+          <Card className="bg-card border border-border">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Button className="gap-2">
+                  <UserPlus className="h-4 w-4" />
+                  Add User
+                </Button>
+                <Button variant="outline" className="gap-2">
+                  <FileText className="h-4 w-4" />
+                  Create Report
+                </Button>
+                <Button variant="outline" className="gap-2">
+                  <Calendar className="h-4 w-4" />
+                  Schedule Meeting
+                </Button>
+                <Button variant="outline" className="gap-2">
+                  <Megaphone className="h-4 w-4" />
+                  Send Announcement
+                </Button>
+              </div>
+            </div>
+          </Card>
+
+          {/* Recent Notifications */}
+          <Card className="bg-card border border-border">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Recent Notifications</h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-foreground">New user registration</p>
+                    <p className="text-xs text-muted-foreground">2 minutes ago</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-foreground">Course completed</p>
+                    <p className="text-xs text-muted-foreground">15 minutes ago</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-orange-50 rounded-lg">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-foreground">System update available</p>
+                    <p className="text-xs text-muted-foreground">1 hour ago</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* System Health */}
+          <Card className="bg-card border border-border">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">System Health</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center p-4">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <span className="text-sm font-medium text-green-600">Online</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">API Status</p>
+                </div>
+                <div className="text-center p-4">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <span className="text-sm font-medium text-green-600">Healthy</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Database</p>
+                </div>
+                <div className="text-center p-4">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                    <span className="text-sm font-medium text-yellow-600">78%</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Storage</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Upcoming Events */}
+          <Card className="bg-card border border-border">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Upcoming Events</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-4 bg-purple-50 rounded-lg text-center">
+                  <Calendar className="h-8 w-8 text-purple-600 mx-auto mb-2" />
+                  <p className="text-sm font-medium text-foreground">Team Meeting</p>
+                  <p className="text-xs text-muted-foreground">Today, 3:00 PM</p>
+                </div>
+                <div className="p-4 bg-blue-50 rounded-lg text-center">
+                  <BookOpen className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                  <p className="text-sm font-medium text-foreground">Training Session</p>
+                  <p className="text-xs text-muted-foreground">Tomorrow, 10:00 AM</p>
+                </div>
+                <div className="p-4 bg-green-50 rounded-lg text-center">
+                  <Target className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                  <p className="text-sm font-medium text-foreground">Review Deadline</p>
+                  <p className="text-xs text-muted-foreground">Dec 28, 5:00 PM</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+
           {/* Enhanced Recent Activity & Top Performers */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card className="bg-card border border-border">
@@ -1415,138 +1545,6 @@ export default function HRDashboard() {
           </div>
         </div>
         </main>
-      </div>
-      
-      {/* Bottom Stats and Actions Section */}
-      <div className="bg-card border-t border-border p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-          {/* Quick Stats */}
-          <Card className="bg-muted/30 border border-border">
-            <div className="p-4">
-              <h3 className="text-sm font-semibold text-foreground mb-3">Quick Stats</h3>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-muted-foreground">Active Users</span>
-                  <span className="text-sm font-medium text-green-600">{stats.users.active}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-muted-foreground">Pending Tasks</span>
-                  <span className="text-sm font-medium text-orange-600">{stats.evaluations.pending}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-muted-foreground">Unread Messages</span>
-                  <span className="text-sm font-medium text-blue-600">{stats.messages.unread}</span>
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          {/* Quick Actions */}
-          <Card className="bg-muted/30 border border-border">
-            <div className="p-4">
-              <h3 className="text-sm font-semibold text-foreground mb-3">Quick Actions</h3>
-              <div className="space-y-2">
-                <Button variant="outline" size="sm" className="w-full justify-start gap-2">
-                  <UserPlus className="h-3 w-3" />
-                  Add User
-                </Button>
-                <Button variant="outline" size="sm" className="w-full justify-start gap-2">
-                  <FileText className="h-3 w-3" />
-                  Create Report
-                </Button>
-                <Button variant="outline" size="sm" className="w-full justify-start gap-2">
-                  <Calendar className="h-3 w-3" />
-                  Schedule Meeting
-                </Button>
-                <Button variant="outline" size="sm" className="w-full justify-start gap-2">
-                  <Megaphone className="h-3 w-3" />
-                  Send Announcement
-                </Button>
-              </div>
-            </div>
-          </Card>
-
-          {/* Recent Notifications */}
-          <Card className="bg-muted/30 border border-border">
-            <div className="p-4">
-              <h3 className="text-sm font-semibold text-foreground mb-3">Recent Notifications</h3>
-              <div className="space-y-2">
-                <div className="flex items-start gap-2 p-2 bg-blue-50 rounded-lg">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-1.5"></div>
-                  <div className="flex-1">
-                    <p className="text-xs font-medium text-foreground">New user registration</p>
-                    <p className="text-xs text-muted-foreground">2 minutes ago</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-2 p-2 bg-green-50 rounded-lg">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-1.5"></div>
-                  <div className="flex-1">
-                    <p className="text-xs font-medium text-foreground">Course completed</p>
-                    <p className="text-xs text-muted-foreground">15 minutes ago</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-2 p-2 bg-orange-50 rounded-lg">
-                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-1.5"></div>
-                  <div className="flex-1">
-                    <p className="text-xs font-medium text-foreground">System update available</p>
-                    <p className="text-xs text-muted-foreground">1 hour ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          {/* System Health */}
-          <Card className="bg-muted/30 border border-border">
-            <div className="p-4">
-              <h3 className="text-sm font-semibold text-foreground mb-3">System Health</h3>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground">API Status</span>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-xs text-green-600">Online</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground">Database</span>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-xs text-green-600">Healthy</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground">Storage</span>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                    <span className="text-xs text-yellow-600">78%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          {/* Upcoming Events */}
-          <Card className="bg-muted/30 border border-border">
-            <div className="p-4">
-              <h3 className="text-sm font-semibold text-foreground mb-3">Upcoming Events</h3>
-              <div className="space-y-2">
-                <div className="p-2 bg-purple-50 rounded-lg">
-                  <p className="text-xs font-medium text-foreground">Team Meeting</p>
-                  <p className="text-xs text-muted-foreground">Today, 3:00 PM</p>
-                </div>
-                <div className="p-2 bg-blue-50 rounded-lg">
-                  <p className="text-xs font-medium text-foreground">Training Session</p>
-                  <p className="text-xs text-muted-foreground">Tomorrow, 10:00 AM</p>
-                </div>
-                <div className="p-2 bg-green-50 rounded-lg">
-                  <p className="text-xs font-medium text-foreground">Review Deadline</p>
-                  <p className="text-xs text-muted-foreground">Dec 28, 5:00 PM</p>
-                </div>
-              </div>
-            </div>
-          </Card>
-        </div>
       </div>
     </div>
   )
