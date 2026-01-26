@@ -1,0 +1,24 @@
+<!-- QEdge Logo SVG -->
+<svg width="180" height="60" viewBox="0 0 180 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="180" height="60" rx="8" fill="url(#gradient)"/>
+  
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Q Shape -->
+  <circle cx="25" cy="30" r="18" fill="white" opacity="0.9"/>
+  <circle cx="25" cy="30" r="14" fill="url(#gradient)"/>
+  <rect x="37" y="28" width="8" height="8" fill="white" opacity="0.9"/>
+  
+  <!-- Edge Text -->
+  <text x="55" y="38" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white">Edge</text>
+  
+  <!-- Tagline -->
+  <text x="55" y="50" font-family="Arial, sans-serif" font-size="8" fill="white" opacity="0.8">Learning Management</text>
+</svg>

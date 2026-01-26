@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
+import { EmailTemplates } from '@/lib/email-templates'
 
 // Initialize Nodemailer transporter with Gmail SMTP
 const transporter = nodemailer.createTransport({
@@ -17,7 +18,15 @@ const emailStorage: any[] = []
 
 export async function POST(request: NextRequest) {
   try {
-    const { to, subject, htmlContent, senderId, recipientId } = await request.json()
+    const { 
+      to, 
+      subject, 
+      htmlContent, 
+      senderId, 
+      recipientId,
+      templateType,
+      templateData 
+    } = await request.json()
 
     // Validate input
     if (!to || !subject || !htmlContent || !senderId) {
@@ -29,8 +38,80 @@ export async function POST(request: NextRequest) {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
     const pixelUrl = `${appUrl}/api/emails/track/${trackingId}`
 
+    let finalHtmlContent = htmlContent
+    let finalSubject = subject
+
+    // Use template if provided
+    if (templateType && templateData) {
+      try {
+        let template
+        switch (templateType) {
+          case 'welcome':
+            template = EmailTemplates.welcomeEmail(
+              templateData.userName || 'User',
+              templateData.userEmail || to
+            )
+            break
+          case 'courseEnrollment':
+            template = EmailTemplates.courseEnrollment(
+              templateData.userName || 'User',
+              templateData.courseTitle || 'Course',
+              templateData.courseUrl || '#'
+            )
+            break
+          case 'meetingInvitation':
+            template = EmailTemplates.meetingInvitation(
+              templateData.userName || 'User',
+              templateData.meetingTitle || 'Meeting',
+              templateData.meetingTime || 'TBD',
+              templateData.meetingUrl || '#'
+            )
+            break
+          case 'achievementUnlocked':
+            template = EmailTemplates.achievementUnlocked(
+              templateData.userName || 'User',
+              templateData.badgeTitle || 'Achievement',
+              templateData.badgeDescription || 'Description',
+              templateData.profileUrl || '#'
+            )
+            break
+          case 'courseCompletion':
+            template = EmailTemplates.courseCompletion(
+              templateData.userName || 'User',
+              templateData.courseTitle || 'Course',
+              templateData.certificateUrl || '#'
+            )
+            break
+          case 'announcement':
+            template = EmailTemplates.announcementEmail(
+              templateData.userName || 'User',
+              templateData.announcementTitle || 'Announcement',
+              templateData.announcementContent || 'Content',
+              templateData.announcementUrl || '#'
+            )
+            break
+          case 'passwordReset':
+            template = EmailTemplates.passwordReset(
+              templateData.userName || 'User',
+              templateData.resetUrl || '#'
+            )
+            break
+          default:
+            template = null
+        }
+
+        if (template) {
+          finalHtmlContent = template.htmlContent
+          finalSubject = template.subject
+        }
+      } catch (templateError) {
+        console.error('[v0] Template generation error:', templateError)
+        // Fall back to original content if template fails
+      }
+    }
+
     // Add tracking pixel to email content
-    const emailWithPixel = `${htmlContent}<img src="${pixelUrl}" width="1" height="1" alt="" style="display:none;" />`
+    const emailWithPixel = `${finalHtmlContent}<img src="${pixelUrl}" width="1" height="1" alt="" style="display:none;" />`
 
     const sentAt = new Date().toISOString()
 
@@ -42,13 +123,14 @@ export async function POST(request: NextRequest) {
       const emailData = {
         id: trackingId,
         to,
-        subject,
+        subject: finalSubject,
         htmlContent: emailWithPixel,
         senderId,
         recipientId,
         sentAt,
         status: 'stored',
-        method: 'fallback'
+        method: 'fallback',
+        templateType: templateType || 'custom'
       }
       
       emailStorage.push(emailData)
@@ -60,7 +142,8 @@ export async function POST(request: NextRequest) {
         pixelUrl,
         sentAt,
         method: 'fallback',
-        storedEmails: emailStorage.length
+        storedEmails: emailStorage.length,
+        templateUsed: templateType || 'custom'
       }, { status: 200 })
     }
 
@@ -68,7 +151,7 @@ export async function POST(request: NextRequest) {
     const mailOptions = {
       from: process.env.HOST_EMAIL || process.env.SMTP_USER,
       to: to,
-      subject: subject,
+      subject: finalSubject,
       html: emailWithPixel,
     }
 
@@ -83,7 +166,8 @@ export async function POST(request: NextRequest) {
         trackingId,
         pixelUrl,
         sentAt,
-        method: 'smtp'
+        method: 'smtp',
+        templateUsed: templateType || 'custom'
       },
       { status: 200 }
     )
@@ -92,7 +176,16 @@ export async function POST(request: NextRequest) {
     
     // Fallback to storage if SMTP fails
     try {
-      const { to, subject, htmlContent, senderId, recipientId } = await request.json()
+      const { 
+        to, 
+        subject, 
+        htmlContent, 
+        senderId, 
+        recipientId,
+        templateType,
+        templateData 
+      } = await request.json()
+      
       const trackingId = `${Date.now()}-${Math.random().toString(36).substring(7)}`
       const sentAt = new Date().toISOString()
       
@@ -106,6 +199,7 @@ export async function POST(request: NextRequest) {
         sentAt,
         status: 'stored_after_error',
         method: 'fallback',
+        templateType: templateType || 'custom',
         error: error instanceof Error ? error.message : 'Unknown error'
       }
       
@@ -118,6 +212,7 @@ export async function POST(request: NextRequest) {
         sentAt,
         method: 'fallback',
         storedEmails: emailStorage.length,
+        templateUsed: templateType || 'custom',
         originalError: error instanceof Error ? error.message : 'Unknown error'
       }, { status: 200 })
     } catch (fallbackError) {
