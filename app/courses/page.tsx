@@ -6,7 +6,8 @@ import { UnifiedSidebar } from '@/components/unified-sidebar'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { BookOpen, Users, Target, Clock, Search, Filter } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { BookOpen, Users, Target, Clock, Search, Filter, PlayCircle, CheckCircle, Lock } from 'lucide-react'
 import { getCurrentUser, getCourses } from '@/lib/storage'
 import type { Course } from '@/lib/storage'
 
@@ -57,6 +58,53 @@ export default function CoursesPage() {
       
       <main className="flex-1 overflow-auto ml-64">
         <div className="p-8">
+          {/* Step-by-Step Guide */}
+          <Card className="p-6 mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <BookOpen className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-blue-900">How to Use Courses</h3>
+                <p className="text-sm text-blue-700">Follow these steps to make the most of your learning experience</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">1</div>
+                <div>
+                  <h4 className="font-medium text-blue-900">Browse Courses</h4>
+                  <p className="text-sm text-blue-700">Explore available courses and filter by category or difficulty</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">2</div>
+                <div>
+                  <h4 className="font-medium text-blue-900">View Details</h4>
+                  <p className="text-sm text-blue-700">Click on any course to see curriculum, requirements, and instructor info</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">3</div>
+                <div>
+                  <h4 className="font-medium text-blue-900">Enroll & Start</h4>
+                  <p className="text-sm text-blue-700">Enroll in courses that match your goals and begin learning</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">4</div>
+                <div>
+                  <h4 className="font-medium text-blue-900">Track Progress</h4>
+                  <p className="text-sm text-blue-700">Monitor your completion and earn badges and certificates</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div>
@@ -86,19 +134,29 @@ export default function CoursesPage() {
             {filteredCourses.map((course) => {
               const isAssigned = course.assignedTo.includes(currentUser?.id || '')
               const enrollmentCount = course.assignedTo.length
+              const userProgress = isAssigned ? (currentUser?.progress || 0) : 0
+              const isCompleted = userProgress >= 100
               
               return (
                 <Card key={course.id} className="bg-card border border-border overflow-hidden hover:shadow-lg transition-shadow">
                   <div className="relative h-32 bg-gradient-to-r from-blue-500 to-purple-600 p-4">
+                    {isCompleted && (
+                      <div className="absolute top-2 right-2">
+                        <CheckCircle className="h-6 w-6 text-white bg-green-500 rounded-full p-1" />
+                      </div>
+                    )}
                     <div className="absolute bottom-2 left-2 right-2">
                       <h3 className="text-white font-bold text-lg truncate">{course.title}</h3>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full bg-white/20 text-white">
+                        <Badge variant="secondary" className="text-xs">
                           {course.points} pts
-                        </span>
-                        <span className="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full bg-white/20 text-white">
+                        </Badge>
+                        <Badge variant="outline" className="text-xs text-white border-white/20">
                           {course.lessons.length} lessons
-                        </span>
+                        </Badge>
+                        <Badge variant={course.difficulty === 'beginner' ? 'default' : course.difficulty === 'intermediate' ? 'secondary' : 'destructive'} className="text-xs">
+                          {course.difficulty}
+                        </Badge>
                       </div>
                     </div>
                   </div>
@@ -107,6 +165,21 @@ export default function CoursesPage() {
                     <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
                       {course.description}
                     </p>
+
+                    {isAssigned && (
+                      <div className="mb-4">
+                        <div className="flex items-center justify-between text-sm mb-1">
+                          <span className="font-medium">Your Progress</span>
+                          <span>{userProgress}%</span>
+                        </div>
+                        <div className="w-full bg-muted rounded-full h-2">
+                          <div 
+                            className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300" 
+                            style={{ width: `${userProgress}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    )}
 
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">

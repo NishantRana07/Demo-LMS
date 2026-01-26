@@ -15,7 +15,9 @@ import {
   Shield,
   Crown,
   Medal,
-  Gem
+  Gem,
+  HelpCircle,
+  TrendingUp
 } from 'lucide-react'
 import { getCurrentUser, getBadges } from '@/lib/storage'
 import type { Badge } from '@/lib/storage'
@@ -84,6 +86,53 @@ export default function BadgesPage() {
       
       <main className="flex-1 overflow-auto ml-64">
         <div className="p-8">
+          {/* Step-by-Step Guide */}
+          <Card className="p-6 mb-8 bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-yellow-100 rounded-lg">
+                <Award className="h-5 w-5 text-yellow-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-yellow-900">Achievement System Guide</h3>
+                <p className="text-sm text-yellow-700">Learn how to earn badges and track your achievements</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-yellow-600 text-white rounded-full flex items-center justify-center text-sm font-medium">1</div>
+                <div>
+                  <h4 className="font-medium text-yellow-900">Explore Badges</h4>
+                  <p className="text-sm text-yellow-700">Discover available badges and their requirements</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-yellow-600 text-white rounded-full flex items-center justify-center text-sm font-medium">2</div>
+                <div>
+                  <h4 className="font-medium text-yellow-900">Complete Tasks</h4>
+                  <p className="text-sm text-yellow-700">Finish courses, assessments, and activities to earn points</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-yellow-600 text-white rounded-full flex items-center justify-center text-sm font-medium">3</div>
+                <div>
+                  <h4 className="font-medium text-yellow-900">Earn Badges</h4>
+                  <p className="text-sm text-yellow-700">Unlock achievements as you meet specific criteria</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-yellow-600 text-white rounded-full flex items-center justify-center text-sm font-medium">4</div>
+                <div>
+                  <h4 className="font-medium text-yellow-900">Showcase Progress</h4>
+                  <p className="text-sm text-yellow-700">Display your badges and climb the leaderboard</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-foreground">My Badges</h1>

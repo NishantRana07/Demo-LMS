@@ -41,7 +41,7 @@ export function SCORMPlayer({ packageId, userId, onExit, onComplete }: SCORMPlay
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const startTimeRef = useRef<number>(Date.now())
-  const timerRef = useRef<NodeJS.Timeout>()
+  const timerRef = useRef<NodeJS.Timeout | undefined>(undefined)
 
   useEffect(() => {
     // Initialize SCORM API

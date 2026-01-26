@@ -279,7 +279,9 @@ export class SCORMAPI {
   terminate(value: string): string {
     if (!this.isInitialized) return 'false'
     
-    this.data.exit = value || 'normal'
+    // Ensure the exit value is one of the allowed types
+    const validExitValues: Array<'normal' | 'suspend' | 'logout' | 'time-out' | ''> = ['normal', 'suspend', 'logout', 'time-out', '']
+    this.data.exit = validExitValues.includes(value as any) ? value as any : 'normal'
     this.data.timestamp = new Date().toISOString()
     
     if (this.userId) {

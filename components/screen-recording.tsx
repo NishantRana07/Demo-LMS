@@ -62,7 +62,7 @@ export function ScreenRecording({ meetingId, userId, onRecordingComplete }: Scre
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const chunksRef = useRef<Blob[]>([]) as React.MutableRefObject<Blob[]>
-  const timerRef = useRef<NodeJS.Timeout>()
+  const timerRef = useRef<NodeJS.Timeout | undefined>(undefined)
   const recordingDataRef = useRef<RecordingData | null>(null)
 
   useEffect(() => {

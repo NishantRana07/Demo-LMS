@@ -20,7 +20,9 @@ import {
   UserCheck,
   Clock,
   Star,
-  Award
+  Award,
+  HelpCircle,
+  Target
 } from 'lucide-react'
 import { getCurrentUser, getAllUsers } from '@/lib/storage'
 import type { User as UserType } from '@/lib/storage'
@@ -102,6 +104,53 @@ export default function TeamPage() {
       
       <main className="flex-1 overflow-auto ml-64">
         <div className="p-8">
+          {/* Step-by-Step Guide */}
+          <Card className="p-6 mb-8 bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <Users className="h-5 w-5 text-green-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-green-900">Team Collaboration Guide</h3>
+                <p className="text-sm text-green-700">Learn how to effectively connect and collaborate with your team</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-medium">1</div>
+                <div>
+                  <h4 className="font-medium text-green-900">Find Members</h4>
+                  <p className="text-sm text-green-700">Search by name, role, or department to find team members</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-medium">2</div>
+                <div>
+                  <h4 className="font-medium text-green-900">Check Status</h4>
+                  <p className="text-sm text-green-700">See who's online, busy, or away to know availability</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-medium">3</div>
+                <div>
+                  <h4 className="font-medium text-green-900">Send Message</h4>
+                  <p className="text-sm text-green-700">Click on any member to start a conversation</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-medium">4</div>
+                <div>
+                  <h4 className="font-medium text-green-900">Collaborate</h4>
+                  <p className="text-sm text-green-700">Share files, schedule meetings, and work together</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div>
