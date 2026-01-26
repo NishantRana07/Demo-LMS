@@ -47,7 +47,111 @@ import {
   Shield,
   Heart,
   Trophy,
-  Target as TargetIcon
+  Target as TargetIcon,
+  UserPlus,
+  UserMinus,
+  Link,
+  Edit,
+  Trash2,
+  Copy,
+  FileSpreadsheet,
+  Database,
+  Lock,
+  Unlock,
+  Mail as MailIcon,
+  MessageCircle,
+  Smartphone,
+  CreditCard,
+  Layout,
+  Palette,
+  Image as ImageIcon,
+  LogIn,
+  Home,
+  Tags as TagsIcon,
+  Fingerprint,
+  PlayCircle,
+  Book,
+  HelpCircle,
+  Cpu,
+  Wifi,
+  MessageSquare as MessageIcon,
+  Globe2,
+  Video as VideoIcon,
+  FileVideo,
+  FileDown,
+  FileUp,
+  Layers,
+  Grid3X3,
+  List,
+  BarChart,
+  LineChart,
+  PieChart as PieChartIcon,
+  TrendingUp as TrendingUpIcon,
+  Users as UsersIcon,
+  Award as AwardIcon,
+  Target as TargetIcon2,
+  Star as StarIcon,
+  CheckSquare,
+  Square,
+  Menu,
+  X,
+  MoreVertical,
+  MoreHorizontal,
+  ChevronDown,
+  ChevronLeft,
+  ChevronUp,
+  RefreshCw,
+  Save,
+  Printer,
+  Share2,
+  Filter as FilterIcon,
+  Search as SearchIcon,
+  Download as DownloadIcon,
+  Upload as UploadIcon,
+  Plus as PlusIcon,
+  Edit as EditIcon,
+  Trash as TrashIcon,
+  Eye as EyeIcon,
+  Settings as SettingsIcon,
+  Bell as BellIcon,
+  Mail as MailIcon2,
+  Calendar as CalendarIcon,
+  Clock as ClockIcon,
+  Activity as ActivityIcon,
+  BarChart3 as BarChart3Icon,
+  TrendingUp as TrendingUpIcon2,
+  Users as UsersIcon2,
+  Award as AwardIcon2,
+  Star as StarIcon2,
+  Target as TargetIcon3,
+  Heart as HeartIcon,
+  Shield as ShieldIcon,
+  Zap as ZapIcon,
+  Globe as GlobeIcon,
+  Building as BuildingIcon,
+  Briefcase as BriefcaseIcon,
+  GraduationCap as GraduationCapIcon,
+  BookOpen as BookOpenIcon,
+  FileText as FileTextIcon,
+  MessageSquare as MessageSquareIcon,
+  Video as VideoIcon2,
+  Megaphone as MegaphoneIcon,
+  PieChart as PieChartIcon2,
+  ChevronRight as ChevronRightIcon,
+  Clipboard as ClipboardIcon,
+  AlertCircle as AlertCircleIcon,
+  CheckCircle as CheckCircleIcon,
+  ArrowUp as ArrowUpIcon,
+  ArrowDown as ArrowDownIcon,
+  Eye as EyeIcon2,
+  Download as DownloadIcon2,
+  Upload as UploadIcon2,
+  Zap as ZapIcon2,
+  Globe as GlobeIcon2,
+  Shield as ShieldIcon2,
+  Heart as HeartIcon2,
+  Trophy as TrophyIcon,
+  Target as TargetIcon4
 } from 'lucide-react'
 import { 
   getCurrentUser, 
@@ -543,6 +647,7 @@ export default function HRDashboard() {
               </div>
             </Card>
 
+            {/* Users Section */}
             <Card className="bg-card border border-border hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/hr/users')}>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -550,7 +655,7 @@ export default function HRDashboard() {
                   <ChevronRight className="h-5 w-5 text-muted-foreground" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground">Users</h3>
-                <p className="text-sm text-muted-foreground mt-1">Manage learners and staff</p>
+                <p className="text-sm text-muted-foreground mt-1">Manage user accounts</p>
                 <div className="mt-4 space-y-1">
                   <div className="text-sm text-green-600">{stats.users.total} total users</div>
                   <div className="text-xs text-muted-foreground">{stats.users.active} active</div>
@@ -558,36 +663,231 @@ export default function HRDashboard() {
               </div>
             </Card>
 
-            <Card className="bg-card border border-border hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/hr/analytics')}>
+            {/* Batches Section */}
+            <Card className="bg-card border border-border hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/hr/batches')}>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <BarChart3 className="h-8 w-8 text-purple-500" />
+                  <Layers className="h-8 w-8 text-purple-500" />
                   <ChevronRight className="h-5 w-5 text-muted-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground">Analytics</h3>
-                <p className="text-sm text-muted-foreground mt-1">Deep insights & metrics</p>
+                <h3 className="text-lg font-semibold text-foreground">Batches</h3>
+                <p className="text-sm text-muted-foreground mt-1">Manage training batches</p>
                 <div className="mt-4 space-y-1">
-                  <div className="text-sm text-purple-600">Advanced reporting</div>
-                  <div className="text-xs text-muted-foreground">Real-time data</div>
+                  <div className="text-sm text-purple-600">12 active batches</div>
+                  <div className="text-xs text-muted-foreground">240 trainees</div>
                 </div>
               </div>
             </Card>
 
-            <Card className="bg-card border border-border hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/hr/support')}>
+            {/* Evaluations Section */}
+            <Card className="bg-card border border-border hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/hr/evaluations')}>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <MessageSquare className="h-8 w-8 text-orange-500" />
+                  <Clipboard className="h-8 w-8 text-orange-500" />
                   <ChevronRight className="h-5 w-5 text-muted-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground">Support</h3>
-                <p className="text-sm text-muted-foreground mt-1">Help & assistance</p>
+                <h3 className="text-lg font-semibold text-foreground">Evaluations</h3>
+                <p className="text-sm text-muted-foreground mt-1">Assessments & exams</p>
                 <div className="mt-4 space-y-1">
-                  <div className="text-sm text-orange-600">{stats.messages.unread} unread</div>
-                  <div className="text-xs text-muted-foreground">Ticket management</div>
+                  <div className="text-sm text-orange-600">{stats.evaluations.pending} pending</div>
+                  <div className="text-xs text-muted-foreground">0 completed</div>
                 </div>
               </div>
             </Card>
           </div>
+
+          {/* Secondary Management Sections */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {/* Forms Section */}
+            <Card className="bg-card border border-border hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/hr/forms')}>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <FileText className="h-8 w-8 text-cyan-500" />
+                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground">Forms</h3>
+                <p className="text-sm text-muted-foreground mt-1">Custom forms & surveys</p>
+                <div className="mt-4 space-y-1">
+                  <div className="text-sm text-cyan-600">8 forms created</div>
+                  <div className="text-xs text-muted-foreground">245 responses</div>
+                </div>
+              </div>
+            </Card>
+
+            {/* Reports Section */}
+            <Card className="bg-card border border-border hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/hr/reports')}>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <BarChart3 className="h-8 w-8 text-red-500" />
+                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground">Reports</h3>
+                <p className="text-sm text-muted-foreground mt-1">Analytics & insights</p>
+                <div className="mt-4 space-y-1">
+                  <div className="text-sm text-red-600">25 report types</div>
+                  <div className="text-xs text-muted-foreground">Generated daily</div>
+                </div>
+              </div>
+            </Card>
+
+            {/* Settings Section */}
+            <Card className="bg-card border border-border hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/hr/settings')}>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <Settings className="h-8 w-8 text-gray-500" />
+                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground">Settings</h3>
+                <p className="text-sm text-muted-foreground mt-1">System configuration</p>
+                <div className="mt-4 space-y-1">
+                  <div className="text-sm text-gray-600">12 categories</div>
+                  <div className="text-xs text-muted-foreground">System config</div>
+                </div>
+              </div>
+            </Card>
+          </div>
+
+          {/* Advanced Features Section */}
+          <Card className="bg-card border border-border mb-8">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-6">Advanced Features</h3>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {/* Gamification */}
+                <div className="space-y-4">
+                  <h4 className="font-medium text-foreground flex items-center gap-2">
+                    <Trophy className="h-5 w-5 text-yellow-500" />
+                    Gamification
+                  </h4>
+                  <div className="space-y-2">
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                      <Award className="h-4 w-4" />
+                      Leaderboard
+                    </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                      <Star className="h-4 w-4" />
+                      Badges
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Integrations */}
+                <div className="space-y-4">
+                  <h4 className="font-medium text-foreground flex items-center gap-2">
+                    <Link className="h-5 w-5 text-blue-500" />
+                    Integrations
+                  </h4>
+                  <div className="space-y-2">
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                      <Video className="h-4 w-4" />
+                      Webinars/Meetings
+                    </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                      <PlayCircle className="h-4 w-4" />
+                      Vimeo
+                    </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                      <Smartphone className="h-4 w-4" />
+                      SMS/Whatsapp
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Frontend */}
+                <div className="space-y-4">
+                  <h4 className="font-medium text-foreground flex items-center gap-2">
+                    <Layout className="h-5 w-5 text-purple-500" />
+                    Frontend
+                  </h4>
+                  <div className="space-y-2">
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                      <Globe className="h-4 w-4" />
+                      Microsite
+                    </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                      <BookOpen className="h-4 w-4" />
+                      Course Category
+                    </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                      <MessageSquare className="h-4 w-4" />
+                      Blog/FAQ
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Tools */}
+                <div className="space-y-4">
+                  <h4 className="font-medium text-foreground flex items-center gap-2">
+                    <Zap className="h-5 w-5 text-green-500" />
+                    Tools
+                  </h4>
+                  <div className="space-y-2">
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                      <Database className="h-4 w-4" />
+                      Data Management
+                    </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                      <Shield className="h-4 w-4" />
+                      Security
+                    </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                      <HelpCircle className="h-4 w-4" />
+                      Help Center
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* User Management Actions */}
+          <Card className="bg-card border border-border mb-8">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-6">User Management</h3>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Button className="gap-2">
+                  <UserPlus className="h-4 w-4" />
+                  Add Users
+                </Button>
+                <Button variant="outline" className="gap-2">
+                  <Eye className="h-4 w-4" />
+                  View Users
+                </Button>
+                <Button variant="outline" className="gap-2">
+                  <Upload className="h-4 w-4" />
+                  Import/Bulk
+                </Button>
+                <Button variant="outline" className="gap-2">
+                  <Link className="h-4 w-4" />
+                  Trainee Relationships
+                </Button>
+              </div>
+            </div>
+          </Card>
+
+          {/* Evaluation Sub-buttons */}
+          <Card className="bg-card border border-border mb-8">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-6">Evaluations</h3>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Button variant="outline" className="gap-2">
+                  <Clipboard className="h-4 w-4" />
+                  Exam
+                </Button>
+                <Button variant="outline" className="gap-2">
+                  <FileText className="h-4 w-4" />
+                  Assignment
+                </Button>
+                <Button variant="outline" className="gap-2">
+                  <HelpCircle className="h-4 w-4" />
+                  Question Bank
+                </Button>
+                <Button variant="outline" className="gap-2">
+                  <Award className="h-4 w-4" />
+                  Skills
+                </Button>
+              </div>
+            </div>
+          </Card>
 
           {/* Enhanced Recent Activity & Top Performers */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
