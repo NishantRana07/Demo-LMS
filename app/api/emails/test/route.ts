@@ -3,6 +3,17 @@ import nodemailer from 'nodemailer'
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if SMTP is configured
+    if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      console.log('[v0] SMTP not configured, returning demo mode')
+      return NextResponse.json({
+        success: true,
+        message: 'Email service running in demo mode (SMTP not configured)',
+        demoMode: true,
+        smtpConfigured: false
+      }, { status: 200 })
+    }
+
     // Initialize Nodemailer transporter with Gmail SMTP
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
@@ -21,6 +32,8 @@ export async function POST(request: NextRequest) {
       {
         success: true,
         message: 'Email configuration is working correctly',
+        smtpConfigured: true,
+        demoMode: false
       },
       { status: 200 }
     )
@@ -31,6 +44,8 @@ export async function POST(request: NextRequest) {
         success: false,
         error: 'Email configuration test failed',
         details: error instanceof Error ? error.message : 'Unknown error',
+        smtpConfigured: false,
+        demoMode: false
       },
       { status: 500 }
     )
