@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,7 @@ import { microsoftAuth } from '@/lib/microsoft-auth'
 import { getCurrentUser, setCurrentUser, createUser } from '@/lib/storage'
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react'
 
-export default function MicrosoftCallback() {
+function MicrosoftCallbackContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
@@ -137,5 +137,23 @@ export default function MicrosoftCallback() {
         </div>
       </Card>
     </div>
+  )
+}
+
+export default function MicrosoftCallback() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md p-8">
+          <div className="text-center">
+            <Loader2 className="h-12 w-12 text-blue-600 mx-auto mb-4 animate-spin" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Loading...</h2>
+            <p className="text-gray-600">Please wait...</p>
+          </div>
+        </Card>
+      </div>
+    }>
+      <MicrosoftCallbackContent />
+    </Suspense>
   )
 }
