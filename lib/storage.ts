@@ -367,6 +367,21 @@ export function initializeStorage() {
       points: 400,
       badges: ['top_performer']
     },
+    {
+      id: 'user-employee-0',
+      email: 'user@company.com',
+      password: 'user123',
+      role: 'employee',
+      name: 'Company User',
+      createdAt: new Date().toISOString(),
+      joined: '2025-11-15',
+      department: 'General',
+      isActive: true,
+      progress: 50,
+      attendance: 90,
+      points: 250,
+      badges: ['active_learner']
+    },
     // Employees
     {
       id: 'user-employee-1',
