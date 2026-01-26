@@ -31,7 +31,30 @@ import {
   Cog,
   Plug,
   Brush,
-  Layers
+  Layers,
+  UserPlus,
+  Upload,
+  Link as LinkIcon,
+  Clipboard,
+  FileSpreadsheet,
+  Database,
+  Shield,
+  Save,
+  Star,
+  Trophy,
+  PlayCircle,
+  Globe,
+  MessageCircle,
+  Smartphone,
+  ImageIcon,
+  Home,
+  LogIn as LoginIcon,
+  Tags as TagsIcon,
+  Fingerprint,
+  Zap,
+  Bell,
+  Wifi,
+  Cpu
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { setCurrentUser } from '@/lib/storage'
@@ -70,13 +93,134 @@ export function HRSidebar({ userName }: SidebarProps) {
       href: '/hr/dashboard'
     },
     {
-      section: 'assessments',
-      title: 'Assessments',
-      icon: FileText,
+      section: 'users',
+      title: 'User Management',
+      icon: Users,
       items: [
-        { href: '/hr/assessments', title: 'All Assessments', icon: FileText },
-        { href: '/hr/assessments/analytics', title: 'Analytics', icon: BarChart3 },
-        { href: '/hr/assessments/questions', title: 'Question Bank', icon: HelpCircle }
+        { href: '/hr/users', title: 'View Users', icon: UserCheck },
+        { href: '/hr/users/add', title: 'Add User', icon: UserPlus },
+        { href: '/hr/users/import', title: 'Import/Bulk', icon: Upload },
+        { href: '/hr/users/relationships', title: 'Trainee Relationships', icon: LinkIcon }
+      ]
+    },
+    {
+      section: 'batches',
+      title: 'Batches',
+      icon: Layers,
+      items: [
+        { href: '/hr/batches', title: 'All Batches', icon: Layers },
+        { href: '/hr/batches/create', title: 'Create Batch', icon: UserPlus },
+        { href: '/hr/batches/schedule', title: 'Schedule', icon: Calendar }
+      ]
+    },
+    {
+      section: 'evaluations',
+      title: 'Evaluations',
+      icon: Clipboard,
+      items: [
+        { href: '/hr/evaluations/exam', title: 'Exam', icon: Clipboard },
+        { href: '/hr/evaluations/assignment', title: 'Assignment', icon: FileText },
+        { href: '/hr/evaluations/question-bank', title: 'Question Bank', icon: HelpCircle },
+        { href: '/hr/evaluations/skills', title: 'Skills', icon: Award }
+      ]
+    },
+    {
+      section: 'forms',
+      title: 'Forms',
+      icon: FileSpreadsheet,
+      items: [
+        { href: '/hr/forms', title: 'All Forms', icon: FileSpreadsheet },
+        { href: '/hr/forms/create', title: 'Create Form', icon: UserPlus },
+        { href: '/hr/forms/responses', title: 'Responses', icon: MessageSquare }
+      ]
+    },
+    {
+      section: 'reports',
+      title: 'Reports',
+      icon: BarChart3,
+      items: [
+        { href: '/hr/reports/course', title: 'Course', icon: BookOpen },
+        { href: '/hr/reports/trainees', title: 'Trainees', icon: Users },
+        { href: '/hr/reports/branch', title: 'Branch', icon: Building },
+        { href: '/hr/reports/department', title: 'Department', icon: Briefcase },
+        { href: '/hr/reports/designation', title: 'Designation', icon: GraduationCap },
+        { href: '/hr/reports/batch', title: 'Batch', icon: Layers },
+        { href: '/hr/reports/exams', title: 'Exams', icon: Clipboard },
+        { href: '/hr/reports/skills', title: 'Skills', icon: Award },
+        { href: '/hr/reports/engagement', title: 'Engagement Analytics', icon: BarChart3 },
+        { href: '/hr/reports/enrollment', title: 'Enrollment Report', icon: Target },
+        { href: '/hr/reports/leaderboard', title: 'Leaderboard', icon: Trophy },
+        { href: '/hr/reports/badges', title: 'Badges', icon: Star },
+        { href: '/hr/reports/learning-path', title: 'Learning Path', icon: BookOpen },
+        { href: '/hr/reports/classrooms', title: 'Classrooms', icon: Building },
+        { href: '/hr/reports/mail-activity', title: 'Mail Activity', icon: Mail },
+        { href: '/hr/reports/active-users', title: 'Active User Report', icon: Users },
+        { href: '/hr/reports/logs', title: 'Log', icon: FileText },
+        { href: '/hr/reports/audit-trail', title: 'Audit Trail', icon: Shield },
+        { href: '/hr/reports/transactions', title: 'Transaction', icon: Database },
+        { href: '/hr/reports/saved', title: 'Saved Reports', icon: Save },
+        { href: '/hr/reports/custom', title: 'Custom Reports', icon: Settings }
+      ]
+    },
+    {
+      section: 'customize',
+      title: 'Customize',
+      icon: Palette,
+      items: [
+        { href: '/hr/customize/logo', title: 'Logo', icon: ImageIcon },
+        { href: '/hr/customize/favicon', title: 'Favicon', icon: ImageIcon },
+        { href: '/hr/customize/home', title: 'Home Page', icon: Home },
+        { href: '/hr/customize/login', title: 'Login Page', icon: LoginIcon },
+        { href: '/hr/customize/ui', title: 'User Interface', icon: LayoutDashboard },
+        { href: '/hr/customize/labels', title: 'Labels', icon: TagsIcon },
+        { href: '/hr/customize/email', title: 'Email Address', icon: Mail },
+        { href: '/hr/customize/email-templates', title: 'Email Templates', icon: FileText },
+        { href: '/hr/customize/whatsapp-templates', title: 'Whatsapp Templates', icon: MessageCircle },
+        { href: '/hr/customize/trainee-profile', title: 'Trainee Profile', icon: UserCheck },
+        { href: '/hr/customize/custom-fields', title: 'Custom User Fields', icon: UserPlus },
+        { href: '/hr/customize/sso', title: 'SSO', icon: Fingerprint },
+        { href: '/hr/customize/quick-start', title: 'Quick Start Guide', icon: HelpCircle }
+      ]
+    },
+    {
+      section: 'settings',
+      title: 'Settings',
+      icon: Cog,
+      items: [
+        { href: '/hr/settings/features', title: 'Manage Features', icon: Settings },
+        { href: '/hr/settings/automation', title: 'Automation', icon: Zap },
+        { href: '/hr/settings/branch', title: 'Branch', icon: Building },
+        { href: '/hr/settings/department', title: 'Department', icon: Briefcase },
+        { href: '/hr/settings/designation', title: 'Designation', icon: GraduationCap },
+        { href: '/hr/settings/skills', title: 'Skills', icon: Award },
+        { href: '/hr/settings/venue', title: 'Venue', icon: Building },
+        { href: '/hr/settings/zone', title: 'Zone', icon: Wifi },
+        { href: '/hr/settings/reminders', title: 'Reminders', icon: Bell },
+        { href: '/hr/settings/tags', title: 'Tags', icon: TagsIcon },
+        { href: '/hr/settings/ai-credits', title: 'AI Credits', icon: Cpu }
+      ]
+    },
+    {
+      section: 'gamification',
+      title: 'Gamification',
+      icon: Trophy,
+      items: [
+        { href: '/hr/gamification/leaderboard', title: 'Leaderboard', icon: Trophy },
+        { href: '/hr/gamification/badges', title: 'Badges', icon: Star },
+        { href: '/hr/gamification/points', title: 'Points System', icon: Target },
+        { href: '/hr/gamification/achievements', title: 'Achievements', icon: Award }
+      ]
+    },
+    {
+      section: 'integrations',
+      title: 'Integrations',
+      icon: Plug,
+      items: [
+        { href: '/hr/integrations/webinars', title: 'Webinars/Meetings', icon: Video },
+        { href: '/hr/integrations/vimeo', title: 'Vimeo', icon: PlayCircle },
+        { href: '/hr/integrations/go1', title: 'Go1', icon: Globe },
+        { href: '/hr/integrations/sms', title: 'SMS', icon: MessageCircle },
+        { href: '/hr/integrations/whatsapp', title: 'Whatsapp', icon: Smartphone }
       ]
     },
     {
@@ -91,62 +235,32 @@ export function HRSidebar({ userName }: SidebarProps) {
       ]
     },
     {
-      section: 'people',
-      label: 'People Management',
-      icon: Users,
+      section: 'assessments',
+      title: 'Assessments',
+      icon: FileText,
       items: [
-        { href: '/hr/users', label: 'Users', icon: UserCheck },
-        { href: '/hr/batches', label: 'Batches', icon: Users },
-        { href: '/hr/evaluations', label: 'Evaluations', icon: ClipboardList },
+        { href: '/hr/assessments', title: 'All Assessments', icon: FileText },
+        { href: '/hr/assessments/analytics', title: 'Analytics', icon: BarChart3 },
+        { href: '/hr/assessments/questions', title: 'Question Bank', icon: HelpCircle }
       ]
     },
     {
       section: 'communication',
-      label: 'Communication',
+      title: 'Communication',
       icon: MessageSquare,
       items: [
-        { href: '/hr/announcements', label: 'Announcements', icon: Megaphone },
-        { href: '/hr/forms', label: 'Forms', icon: FileQuestion },
-      ]
-    },
-    {
-      section: 'analytics',
-      label: 'Analytics & Reports',
-      icon: BarChart3,
-      items: [
-        { href: '/hr/reports', label: 'Reports', icon: PieChart },
-        { href: '/hr/analytics', label: 'Analytics', icon: BarChart3 },
+        { href: '/hr/announcements', title: 'Announcements', icon: Megaphone },
+        { href: '/hr/meetings', title: 'Meetings', icon: Video },
+        { href: '/hr/messages', title: 'Messages', icon: Mail }
       ]
     },
     {
       section: 'support',
-      label: 'Support',
+      title: 'Support',
       icon: HelpCircle,
-      href: '/hr/support'
-    },
-    {
-      section: 'settings',
-      label: 'Settings',
-      icon: Settings,
-      href: '/hr/settings'
-    },
-    {
-      section: 'customization',
-      label: 'Customization',
-      icon: Palette,
       items: [
-        { href: '/hr/customize', label: 'Customize', icon: Palette },
-        { href: '/hr/configuration', label: 'Configuration', icon: Cog },
-        { href: '/hr/integrations', label: 'Integrations', icon: Plug },
-      ]
-    },
-    {
-      section: 'design',
-      label: 'Design',
-      icon: Brush,
-      items: [
-        { href: '/hr/themes', label: 'Themes', icon: Palette },
-        { href: '/hr/branding', label: 'Branding', icon: Brush },
+        { href: '/hr/help', title: 'Help Center', icon: HelpCircle },
+        { href: '/hr/support', title: 'Support Tickets', icon: MessageSquare }
       ]
     }
   ]
