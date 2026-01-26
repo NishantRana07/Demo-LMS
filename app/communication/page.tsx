@@ -48,14 +48,14 @@ export default function CommunicationPage() {
   }, [router])
 
   const inboxMessages = messages.filter(msg => 
-    msg.recipientId === currentUser?.id && !msg.isDeleted
+    msg.recipients?.includes(currentUser?.id) && !msg.isDeleted
   )
 
   const sentMessages = messages.filter(msg => 
     msg.senderId === currentUser?.id && !msg.isDeleted
   )
 
-  const unreadCount = inboxMessages.filter(msg => !msg.read).length
+  const unreadCount = inboxMessages.filter(msg => !msg.readBy?.includes(currentUser?.id)).length
 
   const filteredInbox = inboxMessages.filter(msg =>
     msg.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -73,14 +73,15 @@ export default function CommunicationPage() {
     const newMessage: Message = {
       id: Date.now().toString(),
       senderId: currentUser?.id || '',
-      recipientId: selectedMessage.senderId,
+      recipientType: 'individual',
+      recipients: [selectedMessage.senderId],
       subject: `Re: ${selectedMessage.subject}`,
       content: replyText,
       type: 'email',
       sentAt: new Date().toISOString(),
-      read: false,
-      isDeleted: false,
-      readBy: []
+      status: 'sent',
+      readBy: [],
+      isDeleted: false
     }
 
     setMessages(prev => [...prev, newMessage])
@@ -231,7 +232,7 @@ export default function CommunicationPage() {
                           key={message.id}
                           className={`p-4 cursor-pointer hover:bg-muted/50 transition-colors ${
                             selectedMessage?.id === message.id ? 'bg-muted/50' : ''
-                          } ${!message.read ? 'bg-blue-50/50' : ''}`}
+                          } ${!message.readBy?.includes(currentUser?.id) ? 'bg-blue-50/50' : ''}`}
                           onClick={() => {
                             setSelectedMessage(message)
                             markAsRead(message.id)
@@ -239,7 +240,7 @@ export default function CommunicationPage() {
                         >
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex items-center gap-2">
-                              {!message.read && (
+                              {!message.readBy?.includes(currentUser?.id) && (
                                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                               )}
                               <span className="text-sm font-medium text-foreground truncate">
@@ -269,7 +270,7 @@ export default function CommunicationPage() {
                         >
                           <div className="flex items-start justify-between mb-2">
                             <span className="text-sm font-medium text-foreground truncate">
-                              To: {users.find(u => u.id === message.recipientId)?.name || 'Unknown'}
+                              To: {users.find(u => message.recipients?.includes(u.id))?.name || 'Unknown'}
                             </span>
                             <span className="text-xs text-muted-foreground">
                               {new Date(message.sentAt).toLocaleDateString()}
@@ -306,7 +307,7 @@ export default function CommunicationPage() {
                             <User className="h-4 w-4" />
                             {activeTab === 'inbox' 
                               ? `From: ${users.find(u => u.id === selectedMessage.senderId)?.name || 'Unknown'}`
-                              : `To: ${users.find(u => u.id === selectedMessage.recipientId)?.name || 'Unknown'}`
+                              : `To: ${users.find(u => selectedMessage.recipients?.includes(u.id))?.name || 'Unknown'}`
                             }
                           </span>
                           <span className="flex items-center gap-1">

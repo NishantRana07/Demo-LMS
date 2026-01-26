@@ -200,7 +200,12 @@ export default function HRDashboard() {
         description: `Scheduled meeting for ${meetingForm.date} at ${meetingForm.time}`,
         scheduledAt: `${meetingForm.date}T${meetingForm.time}`,
         participants: meetingForm.participants,
-        createdBy: currentUser!.id
+        createdBy: currentUser!.id,
+        createdAt: new Date().toISOString(),
+        status: 'scheduled',
+        duration: 60,
+        platform: 'teams',
+        webinarMode: false
       })
 
       // Reset form

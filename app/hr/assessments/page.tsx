@@ -90,10 +90,24 @@ export default function HRAssessmentsPage() {
     if (!formData.title.trim()) return
 
     const assessmentData = {
-      ...formData,
+      title: formData.title,
+      description: formData.description,
+      type: formData.type,
+      courseId: formData.courseId || undefined,
       questions,
+      settings: {
+        timeLimit: formData.timeLimit,
+        attemptsAllowed: formData.attemptsAllowed,
+        passingScore: formData.passingScore,
+        shuffleQuestions: formData.shuffleQuestions,
+        shuffleOptions: formData.shuffleOptions,
+        showResults: formData.showResults,
+        showCorrectAnswers: formData.showCorrectAnswers,
+        allowReview: formData.allowReview
+      },
       createdBy: currentUser?.id || '',
-      isActive: true
+      isActive: true,
+      tags: formData.tags
     }
 
     if (editingAssessment) {

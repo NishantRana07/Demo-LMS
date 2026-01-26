@@ -14,6 +14,8 @@ export interface User {
   attendance?: number
   points?: number
   badges?: string[]
+  status?: 'online' | 'offline' | 'away'
+  location?: string
 }
 
 export interface Course {
@@ -31,6 +33,11 @@ export interface Course {
   thumbnail?: string
   status?: 'active' | 'draft' | 'archived'
   duration?: number
+  instructor?: {
+    name?: string
+    title?: string
+    bio?: string
+  }
 }
 
 export interface Lesson {
@@ -142,6 +149,7 @@ export interface Message {
   status: 'draft' | 'sent' | 'failed'
   readBy?: string[]
   attachments?: MessageAttachment[]
+  isDeleted?: boolean
 }
 
 export interface MessageAttachment {
@@ -159,6 +167,8 @@ export interface Badge {
   icon: string
   criteria: string
   pointsRequired: number
+  points?: number
+  earnedAt?: string
 }
 
 export interface Activity {

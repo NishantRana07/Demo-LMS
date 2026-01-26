@@ -66,10 +66,12 @@ export default function MicrosoftCallback() {
         }
 
         // Store Microsoft tokens (in a real app, you'd store these securely)
-        localStorage.setItem('microsoft_access_token', tokenResponse.access_token)
-        localStorage.setItem('microsoft_refresh_token', tokenResponse.refresh_token || '')
-        localStorage.setItem('microsoft_expires_at', 
-          (Date.now() + tokenResponse.expires_in * 1000).toString())
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('microsoft_access_token', tokenResponse.access_token)
+          localStorage.setItem('microsoft_refresh_token', tokenResponse.refresh_token || '')
+          localStorage.setItem('microsoft_expires_at', 
+            (Date.now() + tokenResponse.expires_in * 1000).toString())
+        }
 
         setStatus('success')
         setMessage('Successfully authenticated with Microsoft!')

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
-import { X, Mail, Phone, Calendar, User } from 'lucide-react'
+import { X, Mail, Phone, Calendar, User as UserIcon } from 'lucide-react'
 import type { User } from '@/lib/storage'
 
 interface CreateUserModalProps {
@@ -67,7 +67,7 @@ export function CreateUserModal({ onClose, onSubmit }: CreateUserModalProps) {
               <div>
                 <label className="block text-sm font-medium mb-2">Full Name *</label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <UserIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     name="name"
                     value={formData.name}

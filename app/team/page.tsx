@@ -58,7 +58,7 @@ export default function TeamPage() {
     return matchesSearch && matchesDepartment
   })
 
-  const departments = Array.from(new Set(teamMembers.map(member => member.department).filter(Boolean)))
+  const departments = Array.from(new Set(teamMembers.map(member => member.department).filter((dept): dept is string => Boolean(dept))))
 
   const getRoleColor = (role: string) => {
     switch (role) {

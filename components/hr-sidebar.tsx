@@ -41,12 +41,28 @@ interface SidebarProps {
   userName: string
 }
 
+interface NavigationItem {
+  href: string
+  title?: string
+  label?: string
+  icon: any
+}
+
+interface NavigationSection {
+  section: string
+  label?: string
+  title?: string
+  icon: any
+  href?: string
+  items?: NavigationItem[]
+}
+
 export function HRSidebar({ userName }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const [expandedSection, setExpandedSection] = useState<string | null>('learning')
 
-  const navigationSections = [
+  const navigationSections: NavigationSection[] = [
     {
       section: 'dashboard',
       label: 'Dashboard',
@@ -223,7 +239,7 @@ export function HRSidebar({ userName }: SidebarProps) {
                               }`}
                             >
                               <SubIcon className="w-3 h-3" />
-                              {subItem.label}
+                              {subItem.title || subItem.label}
                             </Button>
                           </Link>
                         )

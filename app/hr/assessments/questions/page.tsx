@@ -122,7 +122,7 @@ export default function QuestionBankPage() {
           tags: ['LMS', 'Basics', 'Training'],
           usageCount: 0,
           createdAt: new Date().toISOString(),
-          createdBy: user?.id || ''
+          createdBy: currentUser?.id || ''
         },
         {
           id: 'sample-2',
@@ -136,7 +136,7 @@ export default function QuestionBankPage() {
           tags: ['Learning', 'Blended', 'Education'],
           usageCount: 0,
           createdAt: new Date().toISOString(),
-          createdBy: user?.id || ''
+          createdBy: currentUser?.id || ''
         },
         {
           id: 'sample-3',
@@ -150,7 +150,7 @@ export default function QuestionBankPage() {
           tags: ['Assessment', 'Evaluation', 'Learning'],
           usageCount: 0,
           createdAt: new Date().toISOString(),
-          createdBy: user?.id || ''
+          createdBy: currentUser?.id || ''
         }
       )
     }

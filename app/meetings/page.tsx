@@ -490,7 +490,7 @@ export default function MeetingsPage() {
                             <Button 
                               size="sm" 
                               variant="outline"
-                              onClick={() => navigator.clipboard.writeText(meeting.meetingLink)}
+                              onClick={() => navigator.clipboard.writeText(meeting.meetingLink || '')}
                               className="gap-2"
                             >
                               <ExternalLink className="h-4 w-4" />

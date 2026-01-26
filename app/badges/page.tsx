@@ -107,7 +107,7 @@ export default function BadgesPage() {
                 <div>
                   <p className="text-sm text-muted-foreground">Total Points</p>
                   <p className="text-2xl font-bold text-foreground mt-1">
-                    {userBadges.reduce((sum, badge) => sum + (badge?.points || 0), 0)}
+                    {userBadges.reduce((sum: number, badge: Badge) => sum + (badge?.points || 0), 0)}
                   </p>
                 </div>
                 <Star className="h-8 w-8 text-blue-500" />
@@ -131,7 +131,7 @@ export default function BadgesPage() {
             
             {userBadges.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {userBadges.map((badge) => {
+                {userBadges.map((badge: Badge) => {
                   const Icon = getBadgeIcon(badge?.icon || 'star')
                   
                   return (

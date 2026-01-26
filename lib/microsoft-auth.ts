@@ -27,7 +27,8 @@ export class MicrosoftAuthService {
   constructor() {
     this.clientId = process.env.NEXT_PUBLIC_MICROSOFT_CLIENT_ID || ''
     this.tenantId = process.env.NEXT_PUBLIC_MICROSOFT_TENANT_ID || 'common'
-    this.redirectUri = process.env.NEXT_PUBLIC_MICROSOFT_REDIRECT_URI || `${window.location.origin}/auth/microsoft/callback`
+    this.redirectUri = process.env.NEXT_PUBLIC_MICROSOFT_REDIRECT_URI || 
+      (typeof window !== 'undefined' ? `${window.location.origin}/auth/microsoft/callback` : 'http://localhost:3000/auth/microsoft/callback')
     this.scope = 'openid profile email User.Read Mail.Read Calendars.Read'
   }
 
