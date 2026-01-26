@@ -284,7 +284,7 @@ export function HRSidebar({ userName }: SidebarProps) {
   }
 
   return (
-    <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col fixed left-0 top-0 h-screen z-50">
+    <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen z-50">
       {/* Logo */}
       <div className="p-6 border-b border-sidebar-border bg-gradient-to-r from-blue-600 to-blue-700">
         <div className="flex items-center justify-center">
