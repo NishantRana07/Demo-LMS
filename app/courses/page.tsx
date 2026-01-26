@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { BookOpen, Users, Target, Clock, Search, Filter, PlayCircle, CheckCircle, Lock } from 'lucide-react'
+import { BookOpen, Users, Target, Clock, Search, Filter, PlayCircle, CheckCircle, Lock, Plus, Download, Upload, Star, FileText } from 'lucide-react'
 import { getCurrentUser, getCourses } from '@/lib/storage'
 import type { Course } from '@/lib/storage'
 
@@ -17,6 +17,7 @@ export default function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [activeTab, setActiveTab] = useState<'view' | 'add' | 'import' | 'export' | 'recommended'>('view')
 
   useEffect(() => {
     const user = getCurrentUser()
@@ -106,13 +107,79 @@ export default function CoursesPage() {
           </Card>
 
           {/* Header */}
-          <div className="flex justify-between items-center mb-8">
+          <div className="mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-foreground">All Courses</h1>
-              <p className="text-muted-foreground mt-2">Explore available courses and enhance your skills</p>
+              <h1 className="text-3xl font-bold text-foreground">Learning Object</h1>
+              <p className="text-muted-foreground mt-2">Manage courses, content, and learning resources</p>
             </div>
             
-            <div className="flex gap-2">
+            {/* Navigation Tabs */}
+            <div className="flex items-center gap-1 mt-6 p-1 bg-muted rounded-lg w-fit">
+              <button
+                onClick={() => setActiveTab('view')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  activeTab === 'view'
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <FileText className="w-4 h-4" />
+                <span className="flex-1 text-left">View Courses</span>
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('add')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  activeTab === 'add'
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Plus className="w-4 h-4" />
+                <span className="flex-1 text-left">Add Courses</span>
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('import')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  activeTab === 'import'
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Upload className="w-4 h-4" />
+                <span className="flex-1 text-left">Import Courses</span>
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('export')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  activeTab === 'export'
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Download className="w-4 h-4" />
+                <span className="flex-1 text-left">Export Courses</span>
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('recommended')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  activeTab === 'recommended'
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Star className="w-4 h-4" />
+                <span className="flex-1 text-left">Recommended</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Search Bar - Only show on view tab */}
+          {activeTab === 'view' && (
+            <div className="flex gap-2 mb-8">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -127,9 +194,12 @@ export default function CoursesPage() {
                 Filter
               </Button>
             </div>
-          </div>
+          )}
 
-          {/* Courses Grid */}
+          {/* Tab Content */}
+          {activeTab === 'view' && (
+            <div>
+              {/* Courses Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCourses.map((course) => {
               const isAssigned = course.assignedTo.includes(currentUser?.id || '')
@@ -210,6 +280,102 @@ export default function CoursesPage() {
               <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-foreground mb-2">No courses found</h3>
               <p className="text-muted-foreground">Try adjusting your search or filters</p>
+            </div>
+          )}
+            </div>
+          )}
+
+          {activeTab === 'add' && (
+            <Card className="p-8">
+              <div className="text-center">
+                <Plus className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-foreground mb-2">Add New Course</h3>
+                <p className="text-muted-foreground mb-6">Create and publish new learning content</p>
+                <Button className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Create Course
+                </Button>
+              </div>
+            </Card>
+          )}
+
+          {activeTab === 'import' && (
+            <Card className="p-8">
+              <div className="text-center">
+                <Upload className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-foreground mb-2">Import Courses</h3>
+                <p className="text-muted-foreground mb-6">Upload courses from SCORM packages or other formats</p>
+                <div className="space-y-4">
+                  <Button variant="outline" className="gap-2 w-full">
+                    <Upload className="h-4 w-4" />
+                    Upload SCORM Package
+                  </Button>
+                  <Button variant="outline" className="gap-2 w-full">
+                    <FileText className="h-4 w-4" />
+                    Import from CSV/Excel
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {activeTab === 'export' && (
+            <Card className="p-8">
+              <div className="text-center">
+                <Download className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-foreground mb-2">Export Courses</h3>
+                <p className="text-muted-foreground mb-6">Download course data and content in various formats</p>
+                <div className="space-y-4">
+                  <Button variant="outline" className="gap-2 w-full">
+                    <Download className="h-4 w-4" />
+                    Export as CSV
+                  </Button>
+                  <Button variant="outline" className="gap-2 w-full">
+                    <FileText className="h-4 w-4" />
+                    Export as JSON
+                  </Button>
+                  <Button variant="outline" className="gap-2 w-full">
+                    <Download className="h-4 w-4" />
+                    Export SCORM Packages
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {activeTab === 'recommended' && (
+            <div>
+              <div className="mb-6">
+                <h3 className="text-xl font-semibold text-foreground mb-2">Recommended for You</h3>
+                <p className="text-muted-foreground">Personalized course recommendations based on your learning history and goals</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredCourses.slice(0, 3).map((course) => (
+                  <Card key={`recommended-${course.id}`} className="bg-card border border-border overflow-hidden hover:shadow-lg transition-shadow">
+                    <div className="relative h-32 bg-gradient-to-r from-amber-500 to-orange-600 p-4">
+                      <div className="absolute top-2 right-2">
+                        <Star className="h-6 w-6 text-white fill-current" />
+                      </div>
+                      <div className="absolute bottom-2 left-2 right-2">
+                        <h3 className="text-white font-bold text-lg truncate">{course.title}</h3>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Badge variant="secondary" className="text-xs">
+                            Recommended
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                        {course.description}
+                      </p>
+                      <Button className="w-full" variant="outline">
+                        View Details
+                      </Button>
+                    </div>
+                  </Card>
+                ))}
+              </div>
             </div>
           )}
         </div>
