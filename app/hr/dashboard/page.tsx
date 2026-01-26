@@ -1415,9 +1415,11 @@ export default function HRDashboard() {
           </div>
         </div>
         </main>
-        
-        {/* Right Sidebar */}
-        <aside className="w-80 bg-card border-l border-border p-6 space-y-6">
+      </div>
+      
+      {/* Bottom Stats and Actions Section */}
+      <div className="bg-card border-t border-border p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {/* Quick Stats */}
           <Card className="bg-muted/30 border border-border">
             <div className="p-4">
@@ -1544,7 +1546,7 @@ export default function HRDashboard() {
               </div>
             </div>
           </Card>
-        </aside>
+        </div>
       </div>
     </div>
   )
