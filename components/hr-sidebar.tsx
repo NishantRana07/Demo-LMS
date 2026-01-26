@@ -332,7 +332,7 @@ export function HRSidebar({ userName }: SidebarProps) {
                     }`}
                   >
                     <ItemIcon className="w-4 h-4" />
-                    <span className="flex-1 text-left">{item.label}</span>
+                    <span className="flex-1 text-left">{item.title || item.label}</span>
                     <ChevronDown className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
                   </Button>
                   
@@ -377,7 +377,7 @@ export function HRSidebar({ userName }: SidebarProps) {
                     }`}
                   >
                     <Icon className="w-4 h-4" />
-                    {item.label}
+                    {item.title || item.label}
                   </Button>
                 </Link>
               )
