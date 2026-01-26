@@ -889,6 +889,290 @@ export default function HRDashboard() {
             </div>
           </Card>
 
+          {/* Comprehensive Reports Section */}
+          <Card className="bg-card border border-border mb-8">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-6">Reports</h3>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">Learning Reports</h4>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <BookOpen className="h-4 w-4" />
+                    Course
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Users className="h-4 w-4" />
+                    Trainees
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Layers className="h-4 w-4" />
+                    Batch
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Trophy className="h-4 w-4" />
+                    Learning Path
+                  </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">Assessment Reports</h4>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Clipboard className="h-4 w-4" />
+                    Exams
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Award className="h-4 w-4" />
+                    Skills
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Star className="h-4 w-4" />
+                    Badges
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Target className="h-4 w-4" />
+                    Leaderboard
+                  </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">Analytics Reports</h4>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <BarChart3 className="h-4 w-4" />
+                    Engagement Analytics
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <TrendingUp className="h-4 w-4" />
+                    Enrollment Report
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Mail className="h-4 w-4" />
+                    Mail Activity
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Activity className="h-4 w-4" />
+                    Active User Report
+                  </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">System Reports</h4>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <FileText className="h-4 w-4" />
+                    Log
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Shield className="h-4 w-4" />
+                    Audit Trail
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Database className="h-4 w-4" />
+                    Transaction
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Save className="h-4 w-4" />
+                    Saved Reports
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="mt-4 pt-4 border-t border-border">
+                <Button variant="outline" className="gap-2">
+                  <Settings className="h-4 w-4" />
+                  Custom Reports
+                </Button>
+              </div>
+            </div>
+          </Card>
+
+          {/* Settings & Customize Section */}
+          <Card className="bg-card border border-border mb-8">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-6">Settings & Customize</h3>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">Customization</h4>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <ImageIcon className="h-4 w-4" />
+                    Logo
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <ImageIcon className="h-4 w-4" />
+                    Favicon
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Home className="h-4 w-4" />
+                    Home Page
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <LogIn className="h-4 w-4" />
+                    Login Page
+                  </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">UI Settings</h4>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Layout className="h-4 w-4" />
+                    User Interface
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <TagsIcon className="h-4 w-4" />
+                    Labels
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <MailIcon className="h-4 w-4" />
+                    Email Address
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <FileText className="h-4 w-4" />
+                    Email Templates
+                  </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">User Management</h4>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <MessageCircle className="h-4 w-4" />
+                    Whatsapp Templates
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <UserCheck className="h-4 w-4" />
+                    Trainee Profile
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <UserPlus className="h-4 w-4" />
+                    Custom User Fields
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Fingerprint className="h-4 w-4" />
+                    SSO
+                  </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">System Settings</h4>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <HelpCircle className="h-4 w-4" />
+                    Quick Start Guide
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Settings className="h-4 w-4" />
+                    Manage Features
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Zap className="h-4 w-4" />
+                    Automation
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Bell className="h-4 w-4" />
+                    Reminders
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Gamification Section */}
+          <Card className="bg-card border border-border mb-8">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-6">Gamification</h3>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Button variant="outline" className="gap-2">
+                  <Trophy className="h-4 w-4" />
+                  Leaderboard
+                </Button>
+                <Button variant="outline" className="gap-2">
+                  <Award className="h-4 w-4" />
+                  Badges
+                </Button>
+                <Button variant="outline" className="gap-2">
+                  <Star className="h-4 w-4" />
+                  Points System
+                </Button>
+                <Button variant="outline" className="gap-2">
+                  <Target className="h-4 w-4" />
+                  Achievements
+                </Button>
+              </div>
+            </div>
+          </Card>
+
+          {/* Integrations Section */}
+          <Card className="bg-card border border-border mb-8">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-6">Integrations</h3>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">Communication</h4>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Video className="h-4 w-4" />
+                    Webinars / Meetings
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <MessageCircle className="h-4 w-4" />
+                    SMS
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Smartphone className="h-4 w-4" />
+                    Whatsapp
+                  </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">Content Platforms</h4>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <PlayCircle className="h-4 w-4" />
+                    Vimeo
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Globe className="h-4 w-4" />
+                    Go1
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <BookOpen className="h-4 w-4" />
+                    Content Library
+                  </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">Organization</h4>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Building className="h-4 w-4" />
+                    Branch
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Briefcase className="h-4 w-4" />
+                    Department
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <GraduationCap className="h-4 w-4" />
+                    Designation
+                  </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">Learning Resources</h4>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Layers className="h-4 w-4" />
+                    Venue
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Wifi className="h-4 w-4" />
+                    Zone
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <TagsIcon className="h-4 w-4" />
+                    Tags
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Cpu className="h-4 w-4" />
+                    AI Credits
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Card>
+
           {/* Enhanced Recent Activity & Top Performers */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card className="bg-card border border-border">
