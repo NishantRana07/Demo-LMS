@@ -43,6 +43,26 @@ import {
 } from '@/lib/storage'
 import type { User, Course, Message, Badge, Activity } from '@/lib/storage'
 
+// Add CSS for auto-scrolling animation
+const autoScrollStyles = `
+  @keyframes scroll {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-50%);
+    }
+  }
+  
+  .animate-scroll {
+    animation: scroll 20s linear infinite;
+  }
+  
+  .animate-scroll:hover {
+    animation-play-state: paused;
+  }
+`
+
 export default function UnifiedDashboard() {
   const router = useRouter()
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -53,6 +73,18 @@ export default function UnifiedDashboard() {
   const [activities, setActivities] = useState<Activity[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+
+  // Inject CSS styles for auto-scrolling
+  useEffect(() => {
+    const styleElement = document.createElement('style')
+    styleElement.textContent = autoScrollStyles
+    document.head.appendChild(styleElement)
+    
+    return () => {
+      document.head.removeChild(styleElement)
+    }
+  }, [])
+
   const [activeTab, setActiveTab] = useState<'overview' | 'courses' | 'users' | 'communication' | 'analytics'>('overview')
 
   useEffect(() => {
@@ -154,6 +186,75 @@ export default function UnifiedDashboard() {
            'Explore courses and grow your skills'}
         </p>
       </div>
+
+      {/* Company Showcase Section */}
+      <Card className="bg-card border border-border overflow-hidden">
+        <div className="p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">About QEdge</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Company Images */}
+            <div className="space-y-4">
+              <div className="relative h-48 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg overflow-hidden">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Building className="h-16 w-16 text-white opacity-50" />
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-3">
+                  <p className="text-white text-sm font-medium">Innovation Hub</p>
+                </div>
+              </div>
+              <div className="relative h-48 bg-gradient-to-r from-amber-500 to-orange-600 rounded-lg overflow-hidden">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Users className="h-16 w-16 text-white opacity-50" />
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-3">
+                  <p className="text-white text-sm font-medium">Team Excellence</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Auto-scrolling Content */}
+            <div className="relative h-96 overflow-hidden">
+              <div className="absolute inset-0">
+                <div className="animate-scroll space-y-4">
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <h4 className="font-semibold text-foreground mb-2">Our Mission</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Empowering organizations through innovative learning solutions and cutting-edge technology.
+                    </p>
+                  </div>
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <h4 className="font-semibold text-foreground mb-2">Core Values</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      <li>• Excellence in Education</li>
+                      <li>• Innovation & Technology</li>
+                      <li>• User-Centric Design</li>
+                      <li>• Continuous Improvement</li>
+                    </ul>
+                  </div>
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <h4 className="font-semibold text-foreground mb-2">Achievements</h4>
+                    <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
+                      <div>🏆 500+ Companies</div>
+                      <div>👥 50K+ Learners</div>
+                      <div>📚 1000+ Courses</div>
+                      <div>⭐ 98% Satisfaction</div>
+                    </div>
+                  </div>
+                  <div className="bg-muted/30 rounded-lg p-4">
+                    <h4 className="font-semibold text-foreground mb-2">Technology Stack</h4>
+                    <div className="flex flex-wrap gap-2">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">React</span>
+                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Node.js</span>
+                      <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">TypeScript</span>
+                      <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">SCORM</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Card>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
