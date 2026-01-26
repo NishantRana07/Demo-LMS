@@ -146,14 +146,14 @@ export function HRSidebar({ userName }: SidebarProps) {
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col fixed left-0 top-0 h-screen z-50">
       {/* Logo */}
-      <div className="p-6 border-b border-sidebar-border">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center font-bold">
-            QE
-          </div>
-          <div>
-            <h1 className="font-bold text-lg text-sidebar-primary">QEdge</h1>
-            <p className="text-xs text-sidebar-foreground/60">HR Platform</p>
+      <div className="p-6 border-b border-sidebar-border bg-gradient-to-r from-blue-600 to-blue-700">
+        <div className="flex items-center justify-center">
+          <div className="p-3 bg-white rounded-lg shadow-lg">
+            <img 
+              src="/logo.png" 
+              alt="QEdge" 
+              className="w-24 h-auto rounded"
+            />
           </div>
         </div>
       </div>

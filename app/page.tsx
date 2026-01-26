@@ -23,13 +23,12 @@ export default function RootPage() {
   }, [router])
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
       <div className="text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-lg mb-4">
-          <span className="text-2xl font-bold text-primary-foreground">QE</span>
+        <div className="inline-flex items-center justify-center p-8 bg-white rounded-2xl shadow-xl mb-6">
+          <img src="/logo.png" alt="QEdge" className="w-48 h-auto rounded-lg" />
         </div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">QEdge</h1>
-        <p className="text-muted-foreground">Unified HR Learning Platform</p>
+        <p className="text-muted-foreground text-lg">Unified HR Learning Platform</p>
         <p className="text-sm text-muted-foreground/60 mt-4">Initializing...</p>
       </div>
     </div>

@@ -204,14 +204,14 @@ export function UnifiedSidebar({ userRole, userName }: SidebarProps) {
   return (
     <aside className={`fixed left-0 top-0 h-screen w-64 bg-gradient-to-b ${getRoleColor()} text-white flex flex-col z-50`}>
       {/* Logo */}
-      <div className="p-6 border-b border-white/10">
-        <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 ${getRoleAccentColor()} rounded-lg flex items-center justify-center font-bold`}>
-            QE
-          </div>
-          <div>
-            <h1 className="font-bold text-lg">QEdge</h1>
-            <p className="text-xs text-white/60">Unified Platform</p>
+      <div className="p-6 border-b border-white/10 bg-gradient-to-r from-blue-600 to-blue-700">
+        <div className="flex items-center justify-center">
+          <div className="p-3 bg-white rounded-lg shadow-lg">
+            <img 
+              src="/logo.png" 
+              alt="QEdge" 
+              className="w-24 h-auto rounded"
+            />
           </div>
         </div>
       </div>

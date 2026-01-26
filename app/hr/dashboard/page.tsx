@@ -249,7 +249,7 @@ export default function HRDashboard() {
 
   if (loading) {
     return (
-      <div className="flex h-screen bg-background">
+      <div className="flex h-screen bg-gradient-to-br from-blue-50 to-blue-100">
         <HRSidebar userName={currentUser?.name || ''} />
         <main className="flex-1 p-8">
           <div className="animate-pulse">
@@ -267,7 +267,7 @@ export default function HRDashboard() {
   }
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-gradient-to-br from-blue-50 to-blue-100">
       <HRSidebar userName={currentUser?.name || ''} />
       
       <main className="flex-1 ml-64 overflow-auto">

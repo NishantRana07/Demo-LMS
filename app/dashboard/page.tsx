@@ -618,7 +618,7 @@ export default function UnifiedDashboard() {
     <div className="flex h-screen bg-background">
       <UnifiedSidebar userRole={currentUser?.role || 'candidate'} userName={currentUser?.name || ''} />
       
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1 overflow-auto ml-64">
         <div className="p-8">
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
