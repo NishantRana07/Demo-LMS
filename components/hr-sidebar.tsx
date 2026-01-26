@@ -54,6 +54,16 @@ export function HRSidebar({ userName }: SidebarProps) {
       href: '/hr/dashboard'
     },
     {
+      section: 'assessments',
+      title: 'Assessments',
+      icon: FileText,
+      items: [
+        { href: '/hr/assessments', title: 'All Assessments', icon: FileText },
+        { href: '/hr/assessments/analytics', title: 'Analytics', icon: BarChart3 },
+        { href: '/hr/assessments/questions', title: 'Question Bank', icon: HelpCircle }
+      ]
+    },
+    {
       section: 'learning',
       label: 'Learning Management',
       icon: BookOpen,
@@ -187,8 +197,8 @@ export function HRSidebar({ userName }: SidebarProps) {
                     onClick={() => toggleSection(item.section)}
                     className={`w-full justify-start gap-3 mb-1 ${
                       isSectionActiveState 
-                        ? 'bg-sidebar-primary text-sidebar-primary-foreground' 
-                        : 'text-sidebar-foreground hover:bg-sidebar-accent/20'
+                        ? 'bg-blue-600 text-white' 
+                        : 'text-white hover:bg-white/10'
                     }`}
                   >
                     <ItemIcon className="w-4 h-4" />
@@ -208,8 +218,8 @@ export function HRSidebar({ userName }: SidebarProps) {
                               variant="ghost"
                               className={`w-full justify-start gap-3 text-sm ${
                                 active 
-                                  ? 'bg-sidebar-primary text-sidebar-primary-foreground' 
-                                  : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/20'
+                                  ? 'bg-blue-600 text-white' 
+                                  : 'text-white/70 hover:bg-white/10'
                               }`}
                             >
                               <SubIcon className="w-3 h-3" />
@@ -232,8 +242,8 @@ export function HRSidebar({ userName }: SidebarProps) {
                     variant="ghost"
                     className={`w-full justify-start gap-3 ${
                       active 
-                        ? 'bg-sidebar-primary text-sidebar-primary-foreground' 
-                        : 'text-sidebar-foreground hover:bg-sidebar-accent/20'
+                        ? 'bg-blue-600 text-white' 
+                        : 'text-white hover:bg-white/10'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -251,7 +261,7 @@ export function HRSidebar({ userName }: SidebarProps) {
         <div className="space-y-2">
           <Button
             variant="ghost"
-            className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent/20"
+            className="w-full justify-start gap-3 text-white hover:bg-white/10"
             onClick={() => router.push('/hr/help')}
           >
             <HelpCircle className="w-4 h-4" />

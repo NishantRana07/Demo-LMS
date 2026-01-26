@@ -21,6 +21,7 @@ import {
   Download
 } from 'lucide-react'
 import { getCurrentUser, getCourses } from '@/lib/storage'
+import { getCourseAssessments, getAssessment } from '@/lib/assessment-system'
 import type { Course } from '@/lib/storage'
 
 export default async function CourseDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -29,6 +30,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
   const [course, setCourse] = useState<Course | null>(null)
   const [loading, setLoading] = useState(true)
   const [enrolled, setEnrolled] = useState(false)
+  const [courseAssessments, setCourseAssessments] = useState<any[]>([])
 
   const resolvedParams = await params
   const courseId = resolvedParams.id
@@ -51,6 +53,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
     
     setCourse(foundCourse)
     setEnrolled(foundCourse.assignedTo.includes(user.id))
+    setCourseAssessments(getCourseAssessments(courseId))
     setLoading(false)
   }, [router, courseId])
 
@@ -330,6 +333,47 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
                   </div>
                 </div>
               </Card>
+
+              {/* Assessments */}
+              {courseAssessments.length > 0 && (
+                <Card className="bg-card border border-border mb-6">
+                  <div className="p-6">
+                    <h3 className="font-semibold text-foreground mb-4">Course Assessments</h3>
+                    <div className="space-y-4">
+                      {courseAssessments.map((courseAssessment) => {
+                        const assessment = getAssessment(courseAssessment.assessmentId)
+                        if (!assessment) return null
+                        
+                        return (
+                          <div key={courseAssessment.id} className="border border-border rounded-lg p-4">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <h4 className="font-medium text-foreground">{assessment.title}</h4>
+                                <p className="text-sm text-muted-foreground mb-2">{assessment.description}</p>
+                                <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                  <span>{assessment.questions.length} questions</span>
+                                  <span>{assessment.settings.timeLimit || 'No time limit'} min</span>
+                                  <span>Passing: {assessment.settings.passingScore}%</span>
+                                  {courseAssessment.isRequired && (
+                                    <Badge className="bg-red-100 text-red-800">Required</Badge>
+                                  )}
+                                </div>
+                              </div>
+                              <Button 
+                                onClick={() => router.push(`/quiz/${assessment.id}`)}
+                                className="gap-2"
+                              >
+                                <Play className="h-4 w-4" />
+                                Start Assessment
+                              </Button>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </Card>
+              )}
 
               {/* Actions */}
               <Card className="bg-card border border-border">
