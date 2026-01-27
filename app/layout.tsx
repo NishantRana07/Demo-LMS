@@ -9,7 +9,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'QEdge - HR Learning Management System',
+  title: 'HR Learning Management System',
   description: 'Enterprise HR Learning Management System for employee training and development',
 }
 

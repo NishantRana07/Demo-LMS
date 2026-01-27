@@ -99,7 +99,7 @@ export default function LoginPage() {
         // Redirect HR users to HR dashboard, others to unified dashboard
         router.push(user.role === 'hr' ? '/hr/dashboard' : '/dashboard')
       } else {
-        setError('Invalid email or password. Try hr@company.com / admin123 or user@company.com / user123')
+        setError('Invalid email or password. Try hr@company.com/admin123 or user@company.com/user123')
       }
     } catch (err) {
       console.error('[v0] Login error:', err)
@@ -177,10 +177,10 @@ export default function LoginPage() {
               <div className="bg-blue-50 p-3 rounded-lg text-sm text-blue-900 border border-blue-200">
                 <p className="font-semibold mb-2">Demo Credentials:</p>
                 <p className="mb-1">
-                  HR Admin: <span className="font-mono text-xs">hr@company.com / admin123</span>
+                  HR Admin: <span className="font-mono text-xs">hr@company.com/admin123</span>
                 </p>
                 <p>
-                  Employee: <span className="font-mono text-xs">user@company.com / user123</span>
+                  Employee: <span className="font-mono text-xs">user@company.com/user123</span>
                 </p>
               </div>
 
