@@ -168,16 +168,17 @@ export default function AssessmentAnalyticsPage() {
   }
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-blue-50 to-blue-100">
+    <div className="flex h-screen bg-background">
       <HRSidebar userName={currentUser?.name || ''} />
       
-      <main className="flex-1 ml-64 overflow-auto">
-        <div className="p-8">
-          {/* Header */}
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Assessment Analytics</h1>
-              <p className="text-muted-foreground mt-2">Comprehensive insights and performance metrics</p>
+      <div className="flex flex-1">
+        <main className="flex-1 overflow-auto">
+          <div className="p-8">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">Assessment Analytics</h1>
+                <p className="text-muted-foreground mt-2">Comprehensive insights and performance metrics</p>
             </div>
             <div className="flex gap-2">
               <select
@@ -400,6 +401,7 @@ export default function AssessmentAnalyticsPage() {
           </div>
         </div>
       </main>
+      </div>
     </div>
   )
 }

@@ -245,16 +245,17 @@ export default function HRAssessmentsPage() {
   }
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-blue-50 to-blue-100">
+    <div className="flex h-screen bg-background">
       <HRSidebar userName={currentUser?.name || ''} />
       
-      <main className="flex-1 ml-64 overflow-auto">
-        <div className="p-8">
-          {/* Header */}
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Assessments</h1>
-              <p className="text-muted-foreground mt-2">Create and manage quizzes, exams, and assignments</p>
+      <div className="flex flex-1">
+        <main className="flex-1 overflow-auto">
+          <div className="p-8">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">Assessments</h1>
+                <p className="text-muted-foreground mt-2">Create and manage quizzes, exams, and assignments</p>
             </div>
             <Button onClick={() => setShowCreateForm(true)} className="gap-2">
               <Plus className="h-4 w-4" />
@@ -803,9 +804,10 @@ export default function HRAssessmentsPage() {
                 </div>
               </div>
             </div>
-          )}
-        </div>
-      </main>
+            )}
+          </div>
+        </main>
+      </div>
     </div>
   )
 }

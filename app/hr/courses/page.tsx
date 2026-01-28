@@ -124,24 +124,26 @@ export default function HRCourses() {
     <div className="flex h-screen bg-background">
       <HRSidebar userName={currentUser?.name || ''} />
       
-      <main className="flex-1 ml-64 overflow-auto">
-        <div className="p-8">
-          {/* Header */}
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Courses Management</h1>
-              <p className="text-muted-foreground mt-2">
-                Manage training programs and learning content
-              </p>
+      <div className="flex flex-1">
+        <main className="flex-1 overflow-auto">
+          <div className="p-8">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">Courses Management</h1>
+                <p className="text-muted-foreground mt-2">
+                  Manage training programs and learning content
+                </p>
+              </div>
+              
+              <Button 
+                className="gap-2"
+                onClick={() => setShowCreateModal(true)}
+              >
+                <Plus className="h-4 w-4" />
+                Create Course
+              </Button>
             </div>
-            
-            <Button 
-              className="gap-2"
-              onClick={() => setShowCreateModal(true)}
-            >
-              <Plus className="h-4 w-4" />
-              Create Course
-            </Button>
           </div>
 
           {/* Stats Cards */}
@@ -292,15 +294,15 @@ export default function HRCourses() {
               </div>
             )}
           </div>
-        </div>
-      </main>
+        </main>
 
-      {showCreateModal && (
-        <CreateCourseModal
-          onClose={() => setShowCreateModal(false)}
-          onSubmit={handleCreateCourse}
-        />
-      )}
+        {showCreateModal && (
+          <CreateCourseModal
+            onClose={() => setShowCreateModal(false)}
+            onSubmit={handleCreateCourse}
+          />
+        )}
+      </div>
     </div>
   )
 }

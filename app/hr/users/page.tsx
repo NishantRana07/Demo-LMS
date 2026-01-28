@@ -121,168 +121,170 @@ export default function HRUsers() {
     <div className="flex h-screen bg-background">
       <HRSidebar userName={currentUser?.name || ''} />
       
-      <main className="flex-1 ml-64 overflow-auto">
-        <div className="p-8">
-          {/* Header */}
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Users Management</h1>
-              <p className="text-muted-foreground mt-2">
-                Manage learners, staff, and candidates
-              </p>
+      <div className="flex flex-1">
+        <main className="flex-1 overflow-auto">
+          <div className="p-8">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">Users Management</h1>
+                <p className="text-muted-foreground mt-2">
+                  Manage learners, staff, and candidates
+                </p>
+              </div>
+              
+              <Button 
+                className="gap-2"
+                onClick={() => setShowCreateModal(true)}
+              >
+                <Plus className="h-4 w-4" />
+                Add User
+              </Button>
             </div>
-            
-            <Button 
-              className="gap-2"
-              onClick={() => setShowCreateModal(true)}
-            >
-              <Plus className="h-4 w-4" />
-              Add User
-            </Button>
-          </div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card className="p-6 bg-card border border-border">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Total Users</p>
-                  <p className="text-2xl font-bold text-foreground mt-1">{users.length}</p>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              <Card className="p-6 bg-card border border-border">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total Users</p>
+                    <p className="text-2xl font-bold text-foreground mt-1">{users.length}</p>
+                  </div>
+                  <Users className="h-8 w-8 text-blue-500" />
                 </div>
-                <Users className="h-8 w-8 text-blue-500" />
-              </div>
-            </Card>
+              </Card>
 
-            <Card className="p-6 bg-card border border-border">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">HR Staff</p>
-                  <p className="text-2xl font-bold text-foreground mt-1">
-                    {users.filter(u => u.role === 'hr').length}
-                  </p>
+              <Card className="p-6 bg-card border border-border">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">HR Staff</p>
+                    <p className="text-2xl font-bold text-foreground mt-1">
+                      {users.filter(u => u.role === 'hr').length}
+                    </p>
+                  </div>
+                  <Award className="h-8 w-8 text-purple-500" />
                 </div>
-                <Award className="h-8 w-8 text-purple-500" />
-              </div>
-            </Card>
+              </Card>
 
-            <Card className="p-6 bg-card border border-border">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Employees</p>
-                  <p className="text-2xl font-bold text-foreground mt-1">
-                    {users.filter(u => u.role === 'employee').length}
-                  </p>
+              <Card className="p-6 bg-card border border-border">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Employees</p>
+                    <p className="text-2xl font-bold text-foreground mt-1">
+                      {users.filter(u => u.role === 'employee').length}
+                    </p>
+                  </div>
+                  <BookOpen className="h-8 w-8 text-green-500" />
                 </div>
-                <BookOpen className="h-8 w-8 text-green-500" />
-              </div>
-            </Card>
+              </Card>
 
-            <Card className="p-6 bg-card border border-border">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Candidates</p>
-                  <p className="text-2xl font-bold text-foreground mt-1">
-                    {users.filter(u => u.role === 'candidate').length}
-                  </p>
+              <Card className="p-6 bg-card border border-border">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Candidates</p>
+                    <p className="text-2xl font-bold text-foreground mt-1">
+                      {users.filter(u => u.role === 'candidate').length}
+                    </p>
+                  </div>
+                  <TrendingUp className="h-8 w-8 text-orange-500" />
                 </div>
-                <TrendingUp className="h-8 w-8 text-orange-500" />
-              </div>
-            </Card>
-          </div>
-
-          {/* Filters */}
-          <div className="flex gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search users..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
+              </Card>
             </div>
-            <select
-              value={filterRole}
-              onChange={(e) => setFilterRole(e.target.value)}
-              className="px-3 py-2 border border-border rounded-md bg-background"
-            >
-              <option value="all">All Roles</option>
-              <option value="hr">HR</option>
-              <option value="employee">Employee</option>
-              <option value="candidate">Candidate</option>
-            </select>
-          </div>
 
-          {/* Users List */}
-          <Card className="bg-card border border-border">
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-foreground mb-4">All Users</h3>
-              <div className="space-y-4">
-                {filteredUsers.length > 0 ? (
-                  filteredUsers.map((user) => (
-                    <div key={user.id} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                          <Users className="h-6 w-6 text-blue-600" />
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-foreground">{user.name}</h4>
-                          <p className="text-sm text-muted-foreground">{user.email}</p>
-                          <div className="flex items-center gap-2 mt-1">
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
-                              {user.role}
-                            </span>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              user.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                            }`}>
-                              {user.isActive ? 'Active' : 'Inactive'}
-                            </span>
+            {/* Filters */}
+            <div className="flex gap-4 mb-6">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search users..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <select
+                value={filterRole}
+                onChange={(e) => setFilterRole(e.target.value)}
+                className="px-3 py-2 border border-border rounded-md bg-background"
+              >
+                <option value="all">All Roles</option>
+                <option value="hr">HR</option>
+                <option value="employee">Employee</option>
+                <option value="candidate">Candidate</option>
+              </select>
+            </div>
+
+            {/* Users List */}
+            <Card className="bg-card border border-border">
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-foreground mb-4">All Users</h3>
+                <div className="space-y-4">
+                  {filteredUsers.length > 0 ? (
+                    filteredUsers.map((user) => (
+                      <div key={user.id} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                            <Users className="h-6 w-6 text-blue-600" />
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-foreground">{user.name}</h4>
+                            <p className="text-sm text-muted-foreground">{user.email}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
+                                {user.role}
+                              </span>
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                user.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                              }`}>
+                                {user.isActive ? 'Active' : 'Inactive'}
+                              </span>
+                            </div>
                           </div>
                         </div>
+                        
+                        <div className="flex items-center gap-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setEditingUser(user)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleDeleteUser(user.id)}
+                            className="text-red-600 hover:text-red-700"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => setEditingUser(user)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => handleDeleteUser(user.id)}
-                          className="text-red-600 hover:text-red-700"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-center text-muted-foreground py-8">No users found</p>
-                )}
+                    ))
+                  ) : (
+                    <p className="text-center text-muted-foreground py-8">No users found</p>
+                  )}
+                </div>
               </div>
-            </div>
-          </Card>
-        </div>
-      </main>
+            </Card>
+          </div>
+        </main>
 
-      {showCreateModal && (
-        <CreateUserModal
-          onClose={() => setShowCreateModal(false)}
-          onSubmit={handleCreateUser}
-        />
-      )}
+        {showCreateModal && (
+          <CreateUserModal
+            onClose={() => setShowCreateModal(false)}
+            onSubmit={handleCreateUser}
+          />
+        )}
 
-      {editingUser && (
-        <EditUserModal
-          onClose={() => setEditingUser(null)}
-          onSubmit={handleEditUser}
-          user={editingUser}
-        />
-      )}
+        {editingUser && (
+          <EditUserModal
+            onClose={() => setEditingUser(null)}
+            onSubmit={handleEditUser}
+            user={editingUser}
+          />
+        )}
+      </div>
     </div>
   )
 }
