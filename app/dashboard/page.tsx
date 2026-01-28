@@ -190,16 +190,7 @@ export default function UnifiedDashboard() {
       
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="p-6 bg-card border border-border">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground">Total Users</p>
-              <p className="text-2xl font-bold text-foreground mt-1">{stats.users.total}</p>
-              <p className="text-xs text-green-600 mt-1">+{stats.users.active} active</p>
-            </div>
-            <Users className="h-8 w-8 text-blue-500" />
-          </div>
-        </Card>
+        
 
         <Card className="p-6 bg-card border border-border">
           <div className="flex items-center justify-between">
