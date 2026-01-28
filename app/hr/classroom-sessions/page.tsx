@@ -458,7 +458,6 @@ export default function HRClassroomSessions() {
             </div>
           )}
         </div>
-        </div>
       </main>
       </div>
     </div>

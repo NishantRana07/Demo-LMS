@@ -524,9 +524,6 @@ export default function HRFormsResponses() {
           </Card>
         </div>
       )}
-          </div>
-        </div>
-      </main>
       </div>
     </div>
   )

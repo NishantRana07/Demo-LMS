@@ -39,40 +39,141 @@ export default function MyCoursesPage() {
           id: 'sample-1',
           title: 'JavaScript Fundamentals',
           description: 'Learn the basics of JavaScript programming including variables, functions, and control structures.',
+          createdBy: 'hr@company.com',
+          createdAt: new Date().toISOString(),
           category: 'Programming',
           points: 100,
-          duration: '4h 30m',
+          duration: 270, // 4h 30m in minutes
           lessons: [
-            { id: '1', title: 'Introduction to JavaScript', duration: '45m', completed: true },
-            { id: '2', title: 'Variables and Data Types', duration: '30m', completed: true },
-            { id: '3', title: 'Functions and Scope', duration: '60m', completed: false },
-            { id: '4', title: 'Control Structures', duration: '45m', completed: false },
-            { id: '5', title: 'Arrays and Objects', duration: '90m', completed: false }
+            { 
+              id: '1', 
+              courseId: 'sample-1',
+              title: 'Introduction to JavaScript', 
+              content: 'Learn the basics of JavaScript programming', 
+              type: 'video' as const,
+              duration: 45, 
+              completed: true, 
+              order: 1 
+            },
+            { 
+              id: '2', 
+              courseId: 'sample-1',
+              title: 'Variables and Data Types', 
+              content: 'Understanding variables and data types in JavaScript', 
+              type: 'video' as const,
+              duration: 30, 
+              completed: true, 
+              order: 2 
+            },
+            { 
+              id: '3', 
+              courseId: 'sample-1',
+              title: 'Functions and Scope', 
+              content: 'Deep dive into JavaScript functions and scope', 
+              type: 'video' as const,
+              duration: 60, 
+              completed: false, 
+              order: 3 
+            },
+            { 
+              id: '4', 
+              courseId: 'sample-1',
+              title: 'Control Structures', 
+              content: 'Learn about if statements, loops, and control flow', 
+              type: 'video' as const,
+              duration: 45, 
+              completed: false, 
+              order: 4 
+            },
+            { 
+              id: '5', 
+              courseId: 'sample-1',
+              title: 'Arrays and Objects', 
+              content: 'Working with arrays and objects in JavaScript', 
+              type: 'video' as const,
+              duration: 90, 
+              completed: false, 
+              order: 5 
+            }
           ],
           assignedTo: [user.id],
-          instructor: 'John Smith',
-          enrolledDate: '2024-01-15',
-          difficulty: 'Beginner'
+          instructor: { name: 'John Smith', title: 'Senior Developer', bio: 'JavaScript expert with 10+ years experience' },
+          difficulty: 'beginner' as const
         },
         {
           id: 'sample-2',
           title: 'React Development',
           description: 'Master React.js from basics to advanced concepts including hooks, state management, and routing.',
+          createdBy: 'hr@company.com',
+          createdAt: new Date().toISOString(),
           category: 'Web Development',
           points: 150,
-          duration: '6h 15m',
+          duration: 375, // 6h 15m in minutes
           lessons: [
-            { id: '1', title: 'React Basics', duration: '60m', completed: true },
-            { id: '2', title: 'Components and Props', duration: '45m', completed: true },
-            { id: '3', title: 'State and Lifecycle', duration: '75m', completed: true },
-            { id: '4', title: 'Hooks Deep Dive', duration: '90m', completed: false },
-            { id: '5', title: 'React Router', duration: '60m', completed: false },
-            { id: '6', title: 'State Management', duration: '105m', completed: false }
+            { 
+              id: '1', 
+              courseId: 'sample-2',
+              title: 'React Basics', 
+              content: 'Introduction to React and its core concepts', 
+              type: 'video' as const,
+              duration: 60, 
+              completed: true, 
+              order: 1 
+            },
+            { 
+              id: '2', 
+              courseId: 'sample-2',
+              title: 'Components and Props', 
+              content: 'Understanding React components and props', 
+              type: 'video' as const,
+              duration: 45, 
+              completed: true, 
+              order: 2 
+            },
+            { 
+              id: '3', 
+              courseId: 'sample-2',
+              title: 'State and Lifecycle', 
+              content: 'Managing component state and lifecycle methods', 
+              type: 'video' as const,
+              duration: 75, 
+              completed: true, 
+              order: 3 
+            },
+            { 
+              id: '4', 
+              courseId: 'sample-2',
+              title: 'Hooks Deep Dive', 
+              content: 'Advanced React hooks and custom hooks', 
+              type: 'video' as const,
+              duration: 90, 
+              completed: false, 
+              order: 4 
+            },
+            { 
+              id: '5', 
+              courseId: 'sample-2',
+              title: 'React Router', 
+              content: 'Client-side routing with React Router', 
+              type: 'video' as const,
+              duration: 60, 
+              completed: false, 
+              order: 5 
+            },
+            { 
+              id: '6', 
+              courseId: 'sample-2',
+              title: 'State Management', 
+              content: 'Advanced state management patterns', 
+              type: 'video' as const,
+              duration: 105, 
+              completed: false, 
+              order: 6 
+            }
           ],
           assignedTo: [user.id],
-          instructor: 'Sarah Johnson',
-          enrolledDate: '2024-01-20',
-          difficulty: 'Intermediate'
+          instructor: { name: 'Sarah Johnson', title: 'React Specialist', bio: 'Frontend expert focusing on React ecosystem' },
+          difficulty: 'intermediate' as const
         },
         {
           id: 'sample-3',
@@ -80,23 +181,67 @@ export default function MyCoursesPage() {
           description: 'Learn Python programming with focus on data analysis, visualization, and machine learning basics.',
           category: 'Data Science',
           points: 200,
-          duration: '8h 45m',
+          duration: 525, // 8h 45m in minutes
           lessons: [
-            { id: '1', title: 'Python Basics', duration: '90m', completed: true },
-            { id: '2', title: 'NumPy and Pandas', duration: '120m', completed: false },
-            { id: '3', title: 'Data Visualization', duration: '105m', completed: false },
-            { id: '4', title: 'Machine Learning Intro', duration: '150m', completed: false },
-            { id: '5', title: 'Real-world Projects', duration: '180m', completed: false }
+            { 
+              id: '1', 
+              courseId: 'sample-3',
+              title: 'Python Basics', 
+              content: 'Introduction to Python programming language', 
+              type: 'video' as const,
+              duration: 90, 
+              completed: true, 
+              order: 1 
+            },
+            { 
+              id: '2', 
+              courseId: 'sample-3',
+              title: 'NumPy and Pandas', 
+              content: 'Data manipulation with NumPy and Pandas', 
+              type: 'video' as const,
+              duration: 120, 
+              completed: false, 
+              order: 2 
+            },
+            { 
+              id: '3', 
+              courseId: 'sample-3',
+              title: 'Data Visualization', 
+              content: 'Creating visualizations with Matplotlib and Seaborn', 
+              type: 'video' as const,
+              duration: 105, 
+              completed: false, 
+              order: 3 
+            },
+            { 
+              id: '4', 
+              courseId: 'sample-3',
+              title: 'Machine Learning Intro', 
+              content: 'Introduction to machine learning concepts', 
+              type: 'video' as const,
+              duration: 150, 
+              completed: false, 
+              order: 4 
+            },
+            { 
+              id: '5', 
+              courseId: 'sample-3',
+              title: 'Real-world Projects', 
+              content: 'Apply your knowledge to real data science projects', 
+              type: 'video' as const,
+              duration: 180, 
+              completed: false, 
+              order: 5 
+            }
           ],
           assignedTo: [user.id],
-          instructor: 'Dr. Michael Chen',
-          enrolledDate: '2024-01-25',
-          difficulty: 'Advanced'
+          instructor: { name: 'Dr. Michael Chen', title: 'Data Science Expert', bio: 'PhD in Computer Science with 15+ years in data science and ML' },
+          difficulty: 'advanced' as const
         }
       ]
       
       // Add sample courses to the existing courses
-      const updatedCourses = [...allCourses, ...sampleAssignedCourses]
+      const updatedCourses = [...allCourses, ...sampleAssignedCourses] as Course[]
       setCourses(updatedCourses)
       
       // Save to localStorage for persistence
@@ -224,14 +369,12 @@ export default function MyCoursesPage() {
                         <div className="space-y-3">
                           <div className="flex items-center justify-between text-sm">
                             <span className="text-muted-foreground">Instructor</span>
-                            <span className="font-medium">{course.instructor || 'Staff'}</span>
+                            <span className="font-medium">{course.instructor?.name || 'Staff'}</span>
                           </div>
                           
                           <div className="flex items-center justify-between text-sm">
                             <span className="text-muted-foreground">Enrolled</span>
-                            <span className="font-medium">
-                              {course.enrolledDate ? new Date(course.enrolledDate).toLocaleDateString() : 'Recently'}
-                            </span>
+                            <span className="font-medium">Recently</span>
                           </div>
 
                           <div className="flex items-center justify-between text-sm">
