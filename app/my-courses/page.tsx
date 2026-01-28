@@ -23,7 +23,88 @@ export default function MyCoursesPage() {
       return
     }
     setCurrentUser(user)
-    setCourses(getCourses())
+    
+    // Get courses and add sample assigned courses if none exist
+    const allCourses = getCourses()
+    
+    // If no courses are assigned to current user, add sample data
+    const hasAssignedCourses = allCourses.some(course => 
+      course.assignedTo.includes(user.id)
+    )
+    
+    if (!hasAssignedCourses) {
+      // Create sample assigned courses for the current user
+      const sampleAssignedCourses = [
+        {
+          id: 'sample-1',
+          title: 'JavaScript Fundamentals',
+          description: 'Learn the basics of JavaScript programming including variables, functions, and control structures.',
+          category: 'Programming',
+          points: 100,
+          duration: '4h 30m',
+          lessons: [
+            { id: '1', title: 'Introduction to JavaScript', duration: '45m', completed: true },
+            { id: '2', title: 'Variables and Data Types', duration: '30m', completed: true },
+            { id: '3', title: 'Functions and Scope', duration: '60m', completed: false },
+            { id: '4', title: 'Control Structures', duration: '45m', completed: false },
+            { id: '5', title: 'Arrays and Objects', duration: '90m', completed: false }
+          ],
+          assignedTo: [user.id],
+          instructor: 'John Smith',
+          enrolledDate: '2024-01-15',
+          difficulty: 'Beginner'
+        },
+        {
+          id: 'sample-2',
+          title: 'React Development',
+          description: 'Master React.js from basics to advanced concepts including hooks, state management, and routing.',
+          category: 'Web Development',
+          points: 150,
+          duration: '6h 15m',
+          lessons: [
+            { id: '1', title: 'React Basics', duration: '60m', completed: true },
+            { id: '2', title: 'Components and Props', duration: '45m', completed: true },
+            { id: '3', title: 'State and Lifecycle', duration: '75m', completed: true },
+            { id: '4', title: 'Hooks Deep Dive', duration: '90m', completed: false },
+            { id: '5', title: 'React Router', duration: '60m', completed: false },
+            { id: '6', title: 'State Management', duration: '105m', completed: false }
+          ],
+          assignedTo: [user.id],
+          instructor: 'Sarah Johnson',
+          enrolledDate: '2024-01-20',
+          difficulty: 'Intermediate'
+        },
+        {
+          id: 'sample-3',
+          title: 'Python for Data Science',
+          description: 'Learn Python programming with focus on data analysis, visualization, and machine learning basics.',
+          category: 'Data Science',
+          points: 200,
+          duration: '8h 45m',
+          lessons: [
+            { id: '1', title: 'Python Basics', duration: '90m', completed: true },
+            { id: '2', title: 'NumPy and Pandas', duration: '120m', completed: false },
+            { id: '3', title: 'Data Visualization', duration: '105m', completed: false },
+            { id: '4', title: 'Machine Learning Intro', duration: '150m', completed: false },
+            { id: '5', title: 'Real-world Projects', duration: '180m', completed: false }
+          ],
+          assignedTo: [user.id],
+          instructor: 'Dr. Michael Chen',
+          enrolledDate: '2024-01-25',
+          difficulty: 'Advanced'
+        }
+      ]
+      
+      // Add sample courses to the existing courses
+      const updatedCourses = [...allCourses, ...sampleAssignedCourses]
+      setCourses(updatedCourses)
+      
+      // Save to localStorage for persistence
+      localStorage.setItem('qedge_courses', JSON.stringify(updatedCourses))
+    } else {
+      setCourses(allCourses)
+    }
+    
     setLoading(false)
   }, [router])
 
@@ -101,7 +182,20 @@ export default function MyCoursesPage() {
             {assignedCourses.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {assignedCourses.map((course) => {
-                  const progress = Math.floor(Math.random() * 100) // Mock progress
+                  // Calculate actual progress based on completed lessons
+                  const completedLessons = course.lessons?.filter(lesson => lesson.completed).length || 0
+                  const totalLessons = course.lessons?.length || 1
+                  const progress = Math.round((completedLessons / totalLessons) * 100)
+                  
+                  // Get difficulty color
+                  const getDifficultyColor = (difficulty: string) => {
+                    switch(difficulty?.toLowerCase()) {
+                      case 'beginner': return 'bg-green-100 text-green-800'
+                      case 'intermediate': return 'bg-yellow-100 text-yellow-800'
+                      case 'advanced': return 'bg-red-100 text-red-800'
+                      default: return 'bg-gray-100 text-gray-800'
+                    }
+                  }
                   
                   return (
                     <Card key={course.id} className="bg-card border border-border overflow-hidden hover:shadow-lg transition-shadow">
@@ -113,21 +207,36 @@ export default function MyCoursesPage() {
                               {course.points} pts
                             </span>
                             <span className="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full bg-white/20 text-white">
-                              {course.lessons.length} lessons
+                              {totalLessons} lessons
+                            </span>
+                            <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${getDifficultyColor(course.difficulty || 'beginner')}`}>
+                              {course.difficulty || 'Beginner'}
                             </span>
                           </div>
                         </div>
                       </div>
 
                       <div className="p-4">
-                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                           {course.description}
                         </p>
 
                         <div className="space-y-3">
                           <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Instructor</span>
+                            <span className="font-medium">{course.instructor || 'Staff'}</span>
+                          </div>
+                          
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Enrolled</span>
+                            <span className="font-medium">
+                              {course.enrolledDate ? new Date(course.enrolledDate).toLocaleDateString() : 'Recently'}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center justify-between text-sm">
                             <span className="text-muted-foreground">Progress</span>
-                            <span className="font-medium">{progress}%</span>
+                            <span className="font-medium">{completedLessons}/{totalLessons} lessons ({progress}%)</span>
                           </div>
                           <Progress value={progress} className="h-2" />
                           
@@ -156,9 +265,9 @@ export default function MyCoursesPage() {
                 <div className="p-12 text-center">
                   <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-foreground mb-2">No courses enrolled yet</h3>
-                  <p className="text-muted-foreground mb-4">Browse available courses and start your learning journey</p>
+                  <p className="text-muted-foreground mb-4">You haven't been assigned any courses yet. Contact your HR administrator to get started with your learning journey.</p>
                   <Button onClick={() => router.push('/courses')}>
-                    Browse Courses
+                    Browse Available Courses
                   </Button>
                 </div>
               </Card>

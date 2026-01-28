@@ -223,7 +223,7 @@ export default function MeetingsPage() {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold text-foreground">Meetings</h1>
-              <p className="text-muted-foreground mt-2">Schedule and join team meetings</p>
+              <p className="text-muted-foreground mt-2">View and join team meetings</p>
             </div>
             
             <div className="flex gap-2">
@@ -236,10 +236,6 @@ export default function MeetingsPage() {
                   className="pl-10 w-64"
                 />
               </div>
-              <Button onClick={() => setShowCreateForm(true)} className="gap-2">
-                <Plus className="h-4 w-4" />
-                Schedule Meeting
-              </Button>
             </div>
           </div>
 
@@ -505,14 +501,10 @@ export default function MeetingsPage() {
               </div>
             ) : (
               <Card className="bg-card border border-border">
-                <div className="p-12 text-center">
+                <div className="text-center">
                   <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-foreground mb-2">No meetings scheduled</h3>
-                  <p className="text-muted-foreground mb-4">Schedule your first meeting to get started</p>
-                  <Button onClick={() => setShowCreateForm(true)} className="gap-2">
-                    <Plus className="h-4 w-4" />
-                    Schedule Meeting
-                  </Button>
+                  <p className="text-muted-foreground mb-4">No meetings have been scheduled yet</p>
                 </div>
               </Card>
             )}
