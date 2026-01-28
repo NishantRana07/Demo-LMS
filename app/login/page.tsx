@@ -43,13 +43,19 @@ export default function LoginPage() {
         ]
 
         if (!localStorage.getItem('qedge_users')) {
+          console.log('[Login Debug] Initializing users for first time')
           localStorage.setItem('qedge_users', JSON.stringify(demoUsers))
+          console.log('[Login Debug] Users initialized:', demoUsers.map(u => ({ email: u.email, role: u.role })))
         } else {
-          // Ensure HR user exists with correct role
+          // Ensure both HR and employee users exist with correct roles
           const existingUsers = JSON.parse(localStorage.getItem('qedge_users') || '[]')
+          console.log('[Login Debug] Existing users found:', existingUsers.map((u: any) => ({ email: u.email, role: u.role })))
+          let needsUpdate = false
+          
+          // Check HR user
           const hrUser = existingUsers.find((u: any) => u.email === 'hr@company.com')
           if (!hrUser || hrUser.role !== 'hr') {
-            // Update or add HR user with correct role
+            console.log('[Login Debug] Updating HR user')
             const updatedUsers = existingUsers.filter((u: any) => u.email !== 'hr@company.com')
             updatedUsers.push({
               id: 'user-hr-1',
@@ -60,6 +66,25 @@ export default function LoginPage() {
               createdAt: new Date().toISOString(),
             })
             localStorage.setItem('qedge_users', JSON.stringify(updatedUsers))
+            needsUpdate = true
+          }
+          
+          // Check employee user
+          const empUser = existingUsers.find((u: any) => u.email === 'user@company.com')
+          if (!empUser || empUser.role !== 'employee') {
+            console.log('[Login Debug] Updating employee user')
+            const currentUsers = needsUpdate ? JSON.parse(localStorage.getItem('qedge_users') || '[]') : existingUsers
+            const updatedUsers = currentUsers.filter((u: any) => u.email !== 'user@company.com')
+            updatedUsers.push({
+              id: 'user-employee-0',
+              email: 'user@company.com',
+              password: 'user123',
+              role: 'employee',
+              name: 'Company User',
+              createdAt: new Date().toISOString(),
+            })
+            localStorage.setItem('qedge_users', JSON.stringify(updatedUsers))
+            console.log('[Login Debug] Employee user added/updated')
           }
         }
 
@@ -92,13 +117,20 @@ export default function LoginPage() {
 
       const usersStr = localStorage.getItem('qedge_users')
       const users = usersStr ? JSON.parse(usersStr) : []
+      
+      // Debug: Log available users
+      console.log('[Login Debug] Available users:', users.map((u: any) => ({ email: u.email, role: u.role })))
+      console.log('[Login Debug] Attempting login with:', email)
+      
       const user = users.find((u: any) => u.email === email && u.password === password)
 
       if (user) {
+        console.log('[Login Debug] Login successful for:', user.email, user.role)
         localStorage.setItem('qedge_current_user', JSON.stringify(user))
         // Redirect HR users to HR dashboard, others to unified dashboard
         router.push(user.role === 'hr' ? '/hr/dashboard' : '/dashboard')
       } else {
+        console.log('[Login Debug] Login failed. User not found or password incorrect.')
         setError('Invalid email or password. Try hr@company.com/admin123 or user@company.com/user123')
       }
     } catch (err) {
