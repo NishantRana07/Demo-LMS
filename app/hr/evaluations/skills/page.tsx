@@ -232,8 +232,9 @@ export default function HREvaluationsSkills() {
     <div className="flex h-screen bg-background">
       <HRSidebar userName={currentUser?.name || ''} />
       
-      <main className="flex-1 ml-64 overflow-auto">
-        <div className="p-8">
+      <div className="flex flex-1">
+        <main className="flex-1 overflow-auto">
+          <div className="p-8">
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div>
@@ -565,6 +566,7 @@ export default function HREvaluationsSkills() {
           </div>
         </div>
       </main>
+      </div>
     </div>
   )
 }
