@@ -213,7 +213,7 @@ export default function NotFound() {
               </div>
               <div className="flex items-center justify-center gap-2">
                 <Phone className="h-5 w-5 text-gray-600" />
-                <span className="text-sm text-gray-600">+1 (555) 123-4567</span>
+                <span className="text-sm text-gray-600">+91 989-229-9558</span>
               </div>
               <div className="flex items-center justify-center gap-2">
                 <Clock className="h-5 w-5 text-gray-600" />
