@@ -239,6 +239,23 @@ export default function MeetingsPage() {
             </div>
           </div>
 
+          {/* Demo Disclaimer */}
+          <Card className="mb-8 p-4 bg-amber-50 border-amber-200">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0">
+                <div className="w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">!</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-semibold text-amber-800 mb-1">Demo Disclaimer:</h3>
+                <p className="text-sm text-amber-700">
+                  Certain advanced features, including system-generated attendance and feedback tracking for online sessions, are intentionally disabled in the demo environment and can be enabled during implementation.
+                </p>
+              </div>
+            </div>
+          </Card>
+
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <Card className="p-6 bg-card border border-border">
