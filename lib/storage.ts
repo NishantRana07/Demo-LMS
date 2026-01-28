@@ -257,19 +257,23 @@ export interface Form {
 
 export interface FormField {
   id: string
-  type: 'text' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'date' | 'file'
+  type: 'text' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'date' | 'file' | 'email' | 'number'
   label: string
   required: boolean
   options?: string[]
   validation?: string
+  placeholder?: string
 }
 
 export interface FormResponse {
   id: string
   formId: string
   userId: string
-  answers: Record<string, any>
+  userName: string
+  userEmail: string
   submittedAt: string
+  responses: Record<string, any>
+  status: 'submitted' | 'reviewed'
 }
 
 // Initialize LocalStorage with demo data

@@ -15,7 +15,6 @@ import {
   ArrowLeft,
   Save,
   Trash2,
-  DragDrop,
   Eye,
   Settings,
   HelpCircle
@@ -118,7 +117,7 @@ export default function HRFormsCreate() {
     try {
       const formToCreate = {
         ...formData,
-        status: publish ? 'published' : 'draft',
+        status: publish ? 'published' as const : 'draft' as const,
         createdAt: new Date().toISOString(),
         responses: []
       }

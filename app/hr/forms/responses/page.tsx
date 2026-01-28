@@ -190,7 +190,7 @@ export default function HRFormsResponses() {
 
   const handleMarkAsReviewed = (responseId: string) => {
     const updatedResponses = responses.map(response =>
-      response.id === responseId ? { ...response, status: 'reviewed' } : response
+      response.id === responseId ? { ...response, status: 'reviewed' as const } : response
     )
     setResponses(updatedResponses)
     localStorage.setItem('qedge_form_responses', JSON.stringify(updatedResponses))
