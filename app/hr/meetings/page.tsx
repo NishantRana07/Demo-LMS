@@ -240,17 +240,9 @@ export default function HRMeetings() {
             <div>
               <h1 className="text-3xl font-bold text-foreground">Meetings & Video Conferences</h1>
               <p className="text-muted-foreground mt-2">
-                Schedule and manage virtual meetings with Microsoft Teams, Google Meet, Zoom, and custom links
+                Join scheduled virtual meetings and view recent meetings history
               </p>
             </div>
-            
-            <Button 
-              className="gap-2"
-              onClick={() => setShowCreateModal(true)}
-            >
-              <Plus className="h-4 w-4" />
-              Schedule Meeting
-            </Button>
           </div>
 
           {/* Stats Cards */}
@@ -388,27 +380,7 @@ export default function HRMeetings() {
                             className="gap-2"
                           >
                             <Play className="h-4 w-4" />
-                            Join
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => setSelectedMeetingId(meeting.id)}
-                            className="gap-2"
-                          >
-                            <Users className="h-4 w-4" />
-                            Attendance
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleDeleteMeeting(meeting.id)}
-                            className="text-red-600 hover:text-red-700"
-                          >
-                            <Trash2 className="h-4 w-4" />
+                            Join Meeting
                           </Button>
                         </div>
                       </div>
@@ -423,47 +395,13 @@ export default function HRMeetings() {
                 <p className="text-muted-foreground mb-4">
                   {searchTerm || filterPlatform !== 'all' 
                     ? 'Try adjusting your filters' 
-                    : 'Get started by scheduling your first meeting'}
+                    : 'No meetings have been scheduled yet'}
                 </p>
-                <Button 
-                  className="gap-2"
-                  onClick={() => setShowCreateModal(true)}
-                >
-                  <Plus className="h-4 w-4" />
-                  Schedule Meeting
-                </Button>
               </Card>
             )}
           </div>
         </div>
       </main>
-
-      {showCreateModal && (
-        <CreateMeetingModal
-          onClose={() => setShowCreateModal(false)}
-          onSubmit={handleCreateMeeting}
-        />
-      )}
-
-      {selectedMeetingId && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg w-full max-w-6xl max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Meeting Attendance</h2>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => setSelectedMeetingId(null)}
-                >
-                  Close
-                </Button>
-              </div>
-              <MeetingAttendance meetingId={selectedMeetingId} />
-            </div>
-          </div>
-        </div>
-      )}
       </div>
     </div>
   )

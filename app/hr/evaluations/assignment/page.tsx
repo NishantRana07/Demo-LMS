@@ -21,7 +21,8 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
-  ArrowLeft
+  ArrowLeft,
+  TrendingUp
 } from 'lucide-react'
 import { getCurrentUser, getAllUsers, initializeStorage } from '@/lib/storage'
 import type { User } from '@/lib/storage'
@@ -37,6 +38,13 @@ interface Assignment {
   submissions: number
   totalPoints: number
   createdAt: string
+  learners?: {
+    id: string
+    name: string
+    email: string
+    progress: number
+    completedAt?: string
+  }[]
 }
 
 export default function HREvaluationsAssignment() {
@@ -47,6 +55,7 @@ export default function HREvaluationsAssignment() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState<string>('all')
+  const [filterType, setFilterType] = useState<string>('all')
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [formData, setFormData] = useState({
     title: '',
@@ -80,24 +89,80 @@ export default function HREvaluationsAssignment() {
           title: 'JavaScript Fundamentals Quiz',
           description: 'Test your knowledge of JavaScript basics including variables, functions, and control structures.',
           course: 'Web Development Basics',
-          assignedTo: ['user-emp-1'],
+          assignedTo: ['user-emp-1', 'user-emp-2'],
           dueDate: '2024-02-15',
           status: 'published',
           submissions: 12,
           totalPoints: 100,
-          createdAt: '2024-01-15T10:00:00Z'
+          createdAt: '2024-01-15T10:00:00Z',
+          learners: [
+            {
+              id: 'user-emp-1',
+              name: 'John Smith',
+              email: 'john.smith@company.com',
+              progress: 85,
+              completedAt: '2024-02-10T14:30:00Z'
+            },
+            {
+              id: 'user-emp-2',
+              name: 'Sarah Johnson',
+              email: 'sarah.johnson@company.com',
+              progress: 92,
+              completedAt: '2024-02-08T16:45:00Z'
+            }
+          ]
         },
         {
           id: '2',
           title: 'React Components Assignment',
           description: 'Create a functional React component with props and state management.',
           course: 'Advanced React',
-          assignedTo: ['user-emp-1', 'user-emp-2'],
+          assignedTo: ['user-emp-3', 'user-emp-4', 'user-emp-5'],
           dueDate: '2024-02-20',
-          status: 'draft',
-          submissions: 0,
+          status: 'published',
+          submissions: 8,
           totalPoints: 150,
-          createdAt: '2024-01-18T14:30:00Z'
+          createdAt: '2024-01-18T14:30:00Z',
+          learners: [
+            {
+              id: 'user-emp-3',
+              name: 'Mike Wilson',
+              email: 'mike.wilson@company.com',
+              progress: 67
+            },
+            {
+              id: 'user-emp-4',
+              name: 'Emily Davis',
+              email: 'emily.davis@company.com',
+              progress: 45
+            },
+            {
+              id: 'user-emp-5',
+              name: 'Robert Brown',
+              email: 'robert.brown@company.com',
+              progress: 78
+            }
+          ]
+        },
+        {
+          id: '3',
+          title: 'Python Data Analysis',
+          description: 'Learn data analysis techniques using Python pandas and numpy libraries.',
+          course: 'Data Science Fundamentals',
+          assignedTo: ['user-emp-6'],
+          dueDate: '2024-02-25',
+          status: 'published',
+          submissions: 5,
+          totalPoints: 120,
+          createdAt: '2024-01-20T09:15:00Z',
+          learners: [
+            {
+              id: 'user-emp-6',
+              name: 'Lisa Anderson',
+              email: 'lisa.anderson@company.com',
+              progress: 34
+            }
+          ]
         }
       ]
       setAssignments(demoAssignments)
@@ -185,19 +250,11 @@ export default function HREvaluationsAssignment() {
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-foreground">Assignments</h1>
+              <h1 className="text-3xl font-bold text-foreground">Assigned Courses</h1>
               <p className="text-muted-foreground mt-2">
-                Create and manage course assignments
+                View and manage course assignments to learners
               </p>
             </div>
-            
-            <Button 
-              className="gap-2"
-              onClick={() => setShowCreateForm(true)}
-            >
-              <Plus className="h-4 w-4" />
-              Create Assignment
-            </Button>
           </div>
 
           {/* Stats Cards */}
@@ -205,7 +262,7 @@ export default function HREvaluationsAssignment() {
             <Card className="p-6 bg-card border border-border">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Assignments</p>
+                  <p className="text-sm text-muted-foreground">Assigned Courses</p>
                   <p className="text-2xl font-bold text-foreground mt-1">{assignments.length}</p>
                 </div>
                 <FileText className="h-8 w-8 text-blue-500" />
@@ -215,7 +272,7 @@ export default function HREvaluationsAssignment() {
             <Card className="p-6 bg-card border border-border">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Published</p>
+                  <p className="text-sm text-muted-foreground">Active Learners</p>
                   <p className="text-2xl font-bold text-foreground mt-1">
                     {assignments.filter(a => a.status === 'published').length}
                   </p>
@@ -227,7 +284,7 @@ export default function HREvaluationsAssignment() {
             <Card className="p-6 bg-card border border-border">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Submissions</p>
+                  <p className="text-sm text-muted-foreground">Total Enrollments</p>
                   <p className="text-2xl font-bold text-foreground mt-1">
                     {assignments.reduce((sum, a) => sum + a.submissions, 0)}
                   </p>
@@ -239,12 +296,10 @@ export default function HREvaluationsAssignment() {
             <Card className="p-6 bg-card border border-border">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Pending Review</p>
-                  <p className="text-2xl font-bold text-foreground mt-1">
-                    {assignments.filter(a => a.status === 'published').reduce((sum, a) => sum + a.submissions, 0)}
-                  </p>
+                  <p className="text-sm text-muted-foreground">Completion Rate</p>
+                  <p className="text-2xl font-bold text-foreground mt-1">87%</p>
                 </div>
-                <AlertCircle className="h-8 w-8 text-orange-500" />
+                <TrendingUp className="h-8 w-8 text-orange-500" />
               </div>
             </Card>
           </div>
@@ -254,7 +309,7 @@ export default function HREvaluationsAssignment() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search assignments..."
+                placeholder="Search assigned courses..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -266,94 +321,23 @@ export default function HREvaluationsAssignment() {
               className="px-3 py-2 border border-border rounded-md bg-background"
             >
               <option value="all">All Status</option>
+              <option value="published">Active</option>
               <option value="draft">Draft</option>
-              <option value="published">Published</option>
-              <option value="closed">Closed</option>
+              <option value="archived">Archived</option>
+            </select>
+            <select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+              className="px-3 py-2 border border-border rounded-md bg-background"
+            >
+              <option value="all">All Types</option>
+              <option value="course">Course</option>
+              <option value="quiz">Quiz</option>
+              <option value="assignment">Assignment</option>
             </select>
           </div>
 
-          {/* Create Assignment Form */}
-          {showCreateForm && (
-            <Card className="p-6 mb-8 bg-card border border-border">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-foreground">Create New Assignment</h3>
-                <Button variant="outline" onClick={() => setShowCreateForm(false)}>
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Cancel
-                </Button>
-              </div>
-              
-              <form onSubmit={handleCreateAssignment} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="title">Assignment Title *</Label>
-                    <Input
-                      id="title"
-                      value={formData.title}
-                      onChange={(e) => setFormData({...formData, title: e.target.value})}
-                      placeholder="Enter assignment title"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="course">Course *</Label>
-                    <Input
-                      id="course"
-                      value={formData.course}
-                      onChange={(e) => setFormData({...formData, course: e.target.value})}
-                      placeholder="Enter course name"
-                      required
-                    />
-                  </div>
-                </div>
-                
-                <div>
-                  <Label htmlFor="description">Description *</Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
-                    placeholder="Enter assignment description"
-                    rows={3}
-                    required
-                  />
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="dueDate">Due Date *</Label>
-                    <Input
-                      id="dueDate"
-                      type="date"
-                      value={formData.dueDate}
-                      onChange={(e) => setFormData({...formData, dueDate: e.target.value})}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="totalPoints">Total Points *</Label>
-                    <Input
-                      id="totalPoints"
-                      type="number"
-                      value={formData.totalPoints}
-                      onChange={(e) => setFormData({...formData, totalPoints: e.target.value})}
-                      placeholder="100"
-                      required
-                    />
-                  </div>
-                </div>
-                
-                <div className="flex gap-4">
-                  <Button type="submit">Create Assignment</Button>
-                  <Button type="button" variant="outline" onClick={() => setShowCreateForm(false)}>
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            </Card>
-          )}
-
-          {/* Assignments List */}
+          {/* Assigned Courses List */}
           <div className="space-y-4">
             {filteredAssignments.length > 0 ? (
               filteredAssignments.map((assignment) => (
@@ -363,13 +347,16 @@ export default function HREvaluationsAssignment() {
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="text-lg font-semibold text-foreground">{assignment.title}</h3>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(assignment.status)}`}>
-                          {assignment.status}
+                          {assignment.status === 'published' ? 'Active' : assignment.status}
+                        </span>
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          Course Assigned
                         </span>
                       </div>
                       
                       <p className="text-muted-foreground mb-4">{assignment.description}</p>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm mb-4">
                         <div className="flex items-center gap-2">
                           <FileText className="h-4 w-4 text-muted-foreground" />
                           <span className="text-muted-foreground">Course:</span>
@@ -384,8 +371,8 @@ export default function HREvaluationsAssignment() {
                         
                         <div className="flex items-center gap-2">
                           <Users className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-muted-foreground">Assigned:</span>
-                          <span className="font-medium">{assignment.assignedTo.length} users</span>
+                          <span className="text-muted-foreground">Enrolled:</span>
+                          <span className="font-medium">{assignment.assignedTo.length} learners</span>
                         </div>
                         
                         <div className="flex items-center gap-2">
@@ -394,20 +381,44 @@ export default function HREvaluationsAssignment() {
                           <span className="font-medium">{assignment.submissions}</span>
                         </div>
                       </div>
-                    </div>
-                    
-                    <div className="flex gap-2 ml-4">
-                      <Button variant="outline" size="sm">
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => handleDeleteAssignment(assignment.id)}
-                        className="text-red-600 hover:text-red-700"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+
+                      {/* Learners Section */}
+                      {assignment.learners && assignment.learners.length > 0 && (
+                        <div className="border-t pt-4">
+                          <h4 className="font-medium text-foreground mb-3">Assigned Learners</h4>
+                          <div className="space-y-2">
+                            {assignment.learners.map((learner) => (
+                              <div key={learner.id} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <span className="text-xs font-medium text-blue-800">
+                                      {learner.name.split(' ').map(n => n[0]).join('')}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <p className="font-medium text-foreground">{learner.name}</p>
+                                    <p className="text-sm text-muted-foreground">{learner.email}</p>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                  <div className="text-right">
+                                    <p className="text-sm font-medium text-foreground">{learner.progress}%</p>
+                                    <p className="text-xs text-muted-foreground">Progress</p>
+                                  </div>
+                                  {learner.completedAt && (
+                                    <div className="text-right">
+                                      <p className="text-sm text-green-600">Completed</p>
+                                      <p className="text-xs text-muted-foreground">
+                                        {new Date(learner.completedAt).toLocaleDateString()}
+                                      </p>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </Card>
@@ -415,19 +426,12 @@ export default function HREvaluationsAssignment() {
             ) : (
               <Card className="p-12 text-center">
                 <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-foreground mb-2">No assignments found</h3>
+                <h3 className="text-lg font-semibold text-foreground mb-2">No assigned courses found</h3>
                 <p className="text-muted-foreground mb-4">
                   {searchTerm || filterStatus !== 'all' 
                     ? 'Try adjusting your filters' 
-                    : 'Get started by creating your first assignment'}
+                    : 'No courses have been assigned to learners yet'}
                 </p>
-                <Button 
-                  className="gap-2"
-                  onClick={() => setShowCreateForm(true)}
-                >
-                  <Plus className="h-4 w-4" />
-                  Create Assignment
-                </Button>
               </Card>
             )}
           </div>
