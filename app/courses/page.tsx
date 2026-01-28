@@ -147,41 +147,6 @@ export default function CoursesPage() {
                 <span className="flex-1 text-left">View Courses</span>
               </button>
               
-              <button
-                onClick={() => setActiveTab('add')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activeTab === 'add'
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                <Plus className="w-4 h-4" />
-                <span className="flex-1 text-left">Add Courses</span>
-              </button>
-              
-              <button
-                onClick={() => setActiveTab('import')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activeTab === 'import'
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                <Upload className="w-4 h-4" />
-                <span className="flex-1 text-left">Import Courses</span>
-              </button>
-              
-              <button
-                onClick={() => setActiveTab('export')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activeTab === 'export'
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                <Download className="w-4 h-4" />
-                <span className="flex-1 text-left">Export Courses</span>
-              </button>
               
               <button
                 onClick={() => setActiveTab('recommended')}
